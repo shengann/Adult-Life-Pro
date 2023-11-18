@@ -1,12 +1,18 @@
 import NavList from "./NavList"
+import styled from 'styled-components';
 
+const StyledSection = styled.section`
+    background:#ffffff;
+    border-right: 1px solid #ddd;
+    height:100%;
+    min-height: 100vh;
+`;
 const Sidebar = () => {
   return (
-    <>
-      <div>Logo</div>
+    <StyledSection>
+      <div className="gap-5">Logo</div>
       <NavList/>
-
-    </>
+    </StyledSection>
   )
 }
 export default Sidebar

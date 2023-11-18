@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppLayout, ProtectedRoute, Home, Expenses, FinancialReport, ToDo } from './pages';
+import './index.css';
 
 function App() {
   return (

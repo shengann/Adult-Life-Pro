@@ -5,20 +5,20 @@ import { BiMoney } from "react-icons/bi";
 import { AiOutlineHome } from "react-icons/ai";
 import styled from 'styled-components';
 
-const StyledNavLink = styled(NavLink)`
-    min-width: 250px;
-    max-width: 250px;
-    background:#36454F;
-    text-decoration: none;
-    
-    .icon {
-      margin-left: 10px;
-      color:  #FFFFFF;
+const StyledSection = styled.section`
+    .navLink{
+      min-width: 250px;
+      max-width: 250px;
+      text-decoration: none;
     }
-    .title {
-      font-size: 15px;
-      color: #FFFFFF;
-      text-decoration: none; 
+    
+    
+    .item{
+      color: black;
+      margin-bottom: 10px;
+      font-size: 18px;
+      margin-left: 25px;
+      height: 35px;
     }
 
 `;
@@ -32,21 +32,21 @@ const NavList = () => {
 
   ]
   return (
-    <>
+    <StyledSection>
       {Lists.map((item) => {
         const { path, icon, title } = item
         return (
-          <StyledNavLink
+          <NavLink
             to={path}
-            className="d-flex flex-column"
+            className="d-flex flex-column navLink"
           >
-            <div>
+            <div className="item">
               <span className='icon'>{icon}</span>
               <span className='title'>{title}</span>
             </div>
-          </StyledNavLink>)
+          </NavLink>)
       })}
-    </>
+    </StyledSection>
 
   )
 }
