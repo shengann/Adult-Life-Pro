@@ -7,18 +7,23 @@ import styled from 'styled-components';
 
 const StyledSection = styled.section`
     .navLink{
-      min-width: 250px;
-      max-width: 250px;
+      min-width: 25vh;
       text-decoration: none;
     }
     
-    
     .item{
+      margin-bottom: 1vh;
+      margin-left: 3vh;
+    }
+
+    .icon{
+      color: #9ca3af;
+      font-size: 3vh;
+    }
+
+    .title{
       color: black;
-      margin-bottom: 10px;
-      font-size: 18px;
-      margin-left: 25px;
-      height: 35px;
+      font-size: 1.7vh;
     }
 
 `;
