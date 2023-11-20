@@ -3,6 +3,7 @@ import Badge from 'react-bootstrap/Badge';
 import Container from 'react-bootstrap/Container';
 import styled from 'styled-components';
 import { BiDetail } from "react-icons/bi";
+import { useGetExpensesQuery } from '../reducers/expenseSlice';
 const Section = styled.section`
 font-family: Poppins, sans-serif;
 .table{
@@ -24,6 +25,9 @@ const Tr = styled.tr`
   `
 
 const Expenses = () => {
+  const {data} = useGetExpensesQuery();
+  console.log("data",data)
+
   return (
     <Section>
       <Container fluid>
