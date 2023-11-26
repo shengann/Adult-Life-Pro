@@ -42,6 +42,7 @@ const NavList = () => {
         const { path, icon, title } = item
         return (
           <NavLink
+          key={item.key}
             to={path}
             className="d-flex flex-column navLink"
           >

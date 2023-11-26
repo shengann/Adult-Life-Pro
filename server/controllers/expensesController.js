@@ -13,7 +13,7 @@ const createExpense = async (req, res) => {
 };
 
 const getAllExpense = async (req, res) => {
-    const expenses = await Expense.find({})
+    const expenses = await Expense.find({}).sort({date:-1})
     const groupedExpenses = [];
 
     for (const expense of expenses) {
@@ -32,11 +32,12 @@ const getAllExpense = async (req, res) => {
     const formattedExpenses = [];
     for (const [date, dayExpenses] of Object.entries(groupedExpenses)) {
         const totalExpense = dayExpenses.reduce((total, expense) => total + expense.amount, 0);
+        const formattedTotalExpense = totalExpense.toFixed(2);
 
         formattedExpenses.push({
             date,
             items: dayExpenses,
-            totalExpense,
+            totalExpense: formattedTotalExpense,
         });
     }
 

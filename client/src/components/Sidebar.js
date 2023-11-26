@@ -4,7 +4,6 @@ import styled from 'styled-components';
 const StyledSection = styled.section`
     background:#ffffff;
     border-right: 1px solid #ddd;
-    min-height: 100vh;
 `;
 const Sidebar = () => {
   return (
