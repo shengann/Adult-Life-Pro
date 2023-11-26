@@ -13,8 +13,35 @@ const createExpense = async (req, res) => {
 };
 
 const getAllExpense = async (req, res) => {
-    const expense = await Expense.find({})
-    res.status(200).json({ expense })
+    const expenses = await Expense.find({})
+    const groupedExpenses = [];
+
+    for (const expense of expenses) {
+        const date = new Date(expense.date).toDateString();
+        if (!groupedExpenses[date]) {
+            groupedExpenses[date] = [];
+        }
+
+        groupedExpenses[date].push(expense);
+    }
+    
+    //the output of the groupedExpenses will be:
+    // {date: [{expense}],date: [{expense}],date: [{expense}]...} 
+    //the output of the Object.entries(groupedExpenses):
+    // [date,[{expense},{expense}]],[date,[{expense},{expense}]]
+    const formattedExpenses = [];
+    for (const [date, dayExpenses] of Object.entries(groupedExpenses)) {
+        const totalExpense = dayExpenses.reduce((total, expense) => total + expense.amount, 0);
+
+        formattedExpenses.push({
+            date,
+            items: dayExpenses,
+            totalExpense,
+        });
+    }
+
+    res.status(200).json(formattedExpenses);
+
 };
 
 const updateExpense = async (req, res) => {
