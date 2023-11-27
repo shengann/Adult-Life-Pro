@@ -3,7 +3,6 @@ import Modal from 'react-bootstrap/Modal';
 import { useSelector } from "react-redux";
 import { setExpensesDetailPopup } from '../reducers/reducers.js'
 import { useDispatch } from "react-redux";
-import styled from 'styled-components';
 
 
 const ExpenseDetailPopup = () => {
@@ -15,7 +14,6 @@ const ExpenseDetailPopup = () => {
         dispatch(setExpensesDetailPopup())
     }
 
-
     return (
         <>
             <Modal
@@ -23,7 +21,6 @@ const ExpenseDetailPopup = () => {
                 onHide={handleClose}
                 centered
                 keyboard
-                backdrop={false}
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Modal heading</Modal.Title>

@@ -4,7 +4,6 @@ import { BiDetail } from "react-icons/bi";
 import styled from 'styled-components';
 import moment from 'moment'
 import { MdDelete, MdEdit } from "react-icons/md";
-import ExpenseDetailPopup from './ExpenseDetailPopup';
 import { useDispatch } from "react-redux";
 import { setExpensesDetailPopup } from '../reducers/reducers.js'
 
@@ -65,7 +64,6 @@ const ExpenseTable = ({ date, items, totalExpense }) => {
             </tbody>
           </Table>
         </Section>
-        <ExpenseDetailPopup />
       </>
     )
   }
