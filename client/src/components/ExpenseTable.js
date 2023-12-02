@@ -4,8 +4,6 @@ import { BiDetail } from "react-icons/bi";
 import styled from 'styled-components';
 import moment from 'moment'
 import { MdDelete, MdEdit } from "react-icons/md";
-import { useDispatch } from "react-redux";
-import { setExpensesDetailPopup } from '../reducers/reducers.js'
 
 const Section = styled.section`
 font-family: Poppins, sans-serif;
@@ -27,11 +25,7 @@ const Tr = styled.tr`
   height: 5vh;
   `
 
-const ExpenseTable = ({ date, items, totalExpense }) => {
-  const dispatch = useDispatch()
-  function showDetails() {
-    dispatch(setExpensesDetailPopup())
-  }
+const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
 
   if (items && items.length !== 0) {
     return (
@@ -48,7 +42,7 @@ const ExpenseTable = ({ date, items, totalExpense }) => {
                     <td>RHB Credit Card</td>
                     <td>RM {item.amount}</td>
                     <td className='text-end'>
-                      <BiDetail className="icon" onClick={()=> showDetails()} />
+                      <BiDetail className="icon" onClick={() => onShowDetails(item._id)} />
                       <MdDelete className="icon" />
                       <MdEdit className="icon" />
                     </td>
