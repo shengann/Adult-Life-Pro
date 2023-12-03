@@ -12,14 +12,10 @@ const rootSlice = createSlice({
     reducers: {
         setSidebar(state, action) {
             state.showSidebar = action.payload
-        },
-        setExpensesDetailPopup(state) {
-            state.showExpenseDetailPopup = !state.showExpenseDetailPopup
         }
     }
 })
 
-export const { setExpensesDetailPopup } = rootSlice.actions
 
 
 export default rootSlice.reducer
