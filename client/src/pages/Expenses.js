@@ -1,6 +1,6 @@
 import Container from 'react-bootstrap/Container';
 import styled from 'styled-components';
-import { useGetExpensesQuery } from '../reducers/expenseSlice';
+import { useGetExpensesQuery } from '../slices/expenseSlice';
 import { ExpenseTable } from '../components';
 import ExpenseDetailPopup from '../components/ExpenseDetailPopup';
 import { useState } from 'react';
