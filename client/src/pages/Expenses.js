@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 const Section = styled.section`
 font-family: Poppins, sans-serif;
+width: 70%;
 `;
 
 
@@ -35,6 +36,9 @@ const Expenses = () => {
           />
         )}
         <Section>
+          <div className="text-end mx-2">
+            <button className="btn btn-primary btn-sm">Add Expense</button>
+          </div>
           <Container fluid>
             {expenses.map((expense) => {
               return <ExpenseTable

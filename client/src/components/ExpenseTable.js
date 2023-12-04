@@ -11,7 +11,6 @@ font-family: Poppins, sans-serif;
   border-radius: 3rem; 
   font-weight: 500;
   font-size: 1.5vh;
-  width: 70%;
   table-layout: fixed;
 }
 
@@ -37,7 +36,7 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
               {items.map((item) => {
                 return (
                   <Tr>
-                    <th scope="row"><div className='icon'><Badge pill>{item.category}</Badge> &#x1F372;</div></th>
+                    <th scope="row"><div className='icon'><Badge pill bg="info">{item.category}</Badge> &#x1F372;</div></th>
                     <td>{item.note}</td>
                     <td>RHB Credit Card</td>
                     <td>RM {item.amount}</td>
