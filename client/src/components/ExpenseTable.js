@@ -41,9 +41,9 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
                     <td>RHB Credit Card</td>
                     <td>RM {item.amount}</td>
                     <td className='text-end'>
-                      <BiDetail className="icon" onClick={() => onShowDetails(item)} />
+                      <BiDetail className="icon" onClick={() => onShowDetails(item,'view')} />
                       <MdDelete className="icon" />
-                      <MdEdit className="icon" />
+                      <MdEdit className="icon" onClick={() => onShowDetails(item,'edit')}/>
                     </td>
                   </Tr>)
               })}

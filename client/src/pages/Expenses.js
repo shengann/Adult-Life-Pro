@@ -14,9 +14,11 @@ width: 70%;
 const Expenses = () => {
   const [showExpenseDetailPopup, setShowExpenseDetailPopup] = useState(false);
   const [selectedItems, setSelectedItems] = useState(null);
+  const [displayMode, setDisplayMode] = useState(null);
 
-  const handleShowDetails = (items) => {
+  const handleShowDetails = (items,selectedDisplayMode) => {
     setSelectedItems(items);
+    setDisplayMode(selectedDisplayMode)
     setShowExpenseDetailPopup(true);
   };
 
@@ -32,6 +34,7 @@ const Expenses = () => {
           <ExpenseDetailPopup
             showPopup={showExpenseDetailPopup}
             expenseDetails={selectedItems}
+            displayMode={displayMode}
             onClose={handleClosePopup}
           />
         )}

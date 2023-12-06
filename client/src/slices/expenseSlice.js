@@ -24,7 +24,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         }),
         updateExpense: builder.mutation({
             query: (data) => ({
-                url: `api/v1/expenses/${data.expenseId}`,
+                url: `api/v1/expenses/${data.id}`,
                 method: 'PATCH',
                 body: data,
             }),
