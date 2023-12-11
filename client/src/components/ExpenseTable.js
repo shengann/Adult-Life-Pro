@@ -16,8 +16,19 @@ font-family: Poppins, sans-serif;
 
 .icon{
   font-size: 2.2vh;
-  margin-right: 0.75rem;
+  margin-right: 0.3rem;
 }
+
+ @media (max-width: 768px) {
+    .icon {
+      font-size: 0.65rem; 
+    }
+
+    td {
+      font-size: 0.7rem; 
+    }
+
+  }
 `;
 
 const Tr = styled.tr`
@@ -31,31 +42,33 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
       <>
         <Section>
           <h6>{moment(date).format("MMM Do, YYYY")} <Badge pill bg="dark">{moment(date).format("ddd")}</Badge></h6>
-          <Table hover className="table rounded-3 overflow-hidden">
-            <tbody>
-              {items.map((item) => {
-                return (
-                  <Tr>
-                    <th scope="row"><div className='icon'><Badge pill bg="info">{item.category}</Badge> &#x1F372;</div></th>
-                    <td>{item.note}</td>
-                    <td>RHB Credit Card</td>
-                    <td>RM {item.amount}</td>
-                    <td className='text-end'>
-                      <BiDetail className="icon" onClick={() => onShowDetails(item,'view')} />
-                      <MdDelete className="icon" />
-                      <MdEdit className="icon" onClick={() => onShowDetails(item,'edit')}/>
-                    </td>
-                  </Tr>)
-              })}
-              <Tr>
-                <th scope="row"></th>
-                <td></td>
-                <td></td>
-                <td>RM {totalExpense}</td>
-                <td></td>
-              </Tr>
-            </tbody>
-          </Table>
+          <div className="table-responsive">
+            <Table hover className="table rounded-3 overflow-hidden">
+              <tbody>
+                {items.map((item) => {
+                  return (
+                    <Tr>
+                      <th scope="row"><div className='icon'><Badge pill bg="info" >{item.category}</Badge> &#x1F372;</div></th>
+                      <td>{item.note}</td>
+                      <td>RHB Credit Card</td>
+                      <td>RM {item.amount}</td>
+                      <td className='text-end'>
+                        <BiDetail className="icon" onClick={() => onShowDetails(item, 'view')} />
+                        <MdDelete className="icon" />
+                        <MdEdit className="icon" onClick={() => onShowDetails(item, 'edit')} />
+                      </td>
+                    </Tr>)
+                })}
+                <Tr>
+                  <th scope="row"></th>
+                  <td></td>
+                  <td></td>
+                  <td>RM {totalExpense}</td>
+                  <td></td>
+                </Tr>
+              </tbody>
+            </Table>
+          </div>
         </Section>
       </>
     )

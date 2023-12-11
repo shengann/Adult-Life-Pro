@@ -7,7 +7,11 @@ import { useState } from 'react';
 
 const Section = styled.section`
 font-family: Poppins, sans-serif;
-width: 70%;
+width: 75%;
+
+@media (max-width: 768px) {
+    width: 95%;
+  }
 `;
 
 
@@ -40,7 +44,12 @@ const Expenses = () => {
         )}
         <Section>
           <div className="text-end mx-2">
-            <button className="btn btn-primary btn-sm">Add Expense</button>
+            <button 
+              className="btn btn-primary btn-sm"
+              onClick={() => handleShowDetails([], 'add')}
+            >
+              Add Expense
+            </button>
           </div>
           <Container fluid>
             {expenses.map((expense) => {
