@@ -65,7 +65,7 @@ const updateExpense = async (req, res) => {
             res.status(400).json({ error: 'Please Provide all values' });
             return;
         }
-        const expense = await Expense.findById({ expenseId });
+        const expense = await Expense.findById(expenseId );
 
         if (!expense) {
             res.status(400)
