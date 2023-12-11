@@ -6,6 +6,13 @@ import moment from 'moment'
 import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useUpdateExpenseMutation } from '../slices/expenseSlice';
+import DatePicker from "react-datepicker";
+
+const StyledDatePicker = styled(DatePicker)`
+  border: solid 1px #ccc;
+  border-radius: 10px;
+  height: 4vh;
+`;
 
 const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose }) => {
     const initialState = {
@@ -28,15 +35,17 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
 
     };
 
-    const [updatePost]= useUpdateExpenseMutation()
+    const [updatePost] = useUpdateExpenseMutation()
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("expenseData", expenseData)
-        updatePost({ ...expenseData }).catch((error) => {
-            console.error("Error updating expense:", error);
-        });
+        updatePost({ ...expenseData })
+            .then(() => onClose())
+            .catch((error) => {
+                console.error("Error updating expense:", error);
+            });
 
     };
     return (
@@ -48,13 +57,13 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         >
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
-                <FormRow
-                    type="text"
-                    name="date"
-                    labelText='Date'
-                    value={moment(expenseData.date).format("MMM Do, YYYY")}
-                    handleChange={handleExpenseInput}
+                <StyledDatePicker
+                    value={expenseData.date ? moment(expenseData.date).format("MMM Do, YYYY") : null}
                     disabled={displayMode === 'view' ? true : false}
+                    selected={expenseData.date ? new Date(expenseData.date) : null}
+                    onChange={(date) => setExpenseData({ ...expenseData, date: date })}
+                    showIcon
+                    todayButton="Today"
                 />
                 <FormRow
                     type="text"
@@ -109,10 +118,10 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
 
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={onClose}>
+                <Button className="btn btn-sm" variant="secondary" onClick={onClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleSubmit}>
+                <Button className="btn btn-sm" variant="primary" onClick={handleSubmit}>
                     Save Changes
                 </Button>
             </Modal.Footer>
