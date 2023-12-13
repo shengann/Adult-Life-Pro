@@ -7,11 +7,17 @@ import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useUpdateExpenseMutation } from '../slices/expenseSlice';
 import DatePicker from "react-datepicker";
+import Creatable from 'react-select/creatable';
 
 const StyledDatePicker = styled(DatePicker)`
   border: solid 1px #ccc;
   border-radius: 10px;
-  height: 4vh;
+  height: 5.5vh;
+  width: 95%;
+`;
+
+const StyledCreatable = styled(Creatable)`
+  width: 70%;
 `;
 
 const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose }) => {
@@ -23,7 +29,6 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         description: expenseDetails.description,
         note: expenseDetails.note
     }
-
     const [expenseData, setExpenseData] = useState(initialState);
 
     const handleExpenseInput = (e) => {
@@ -34,20 +39,25 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         }));
 
     };
-
-    const [updatePost] = useUpdateExpenseMutation()
-
-
+    const [updateExpense] = useUpdateExpenseMutation()
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("expenseData", expenseData)
-        updatePost({ ...expenseData })
+        updateExpense({ ...expenseData })
             .then(() => onClose())
             .catch((error) => {
                 console.error("Error updating expense:", error);
             });
-
     };
+
+    const options = [
+        { value: 'Groceries', label: 'Groceries' },
+        { value: 'Dining Out', label: 'Dining Out' },
+        { value: 'Transportation', label: 'Transportation' }
+    ]
+
+    const [isSplitExpense, setIsSplitExpense] = useState(false);
+    console.log("expenseData", expenseData.category)
+
     return (
         <Modal
             show={showPopup}
@@ -57,27 +67,29 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         >
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
-                <StyledDatePicker
-                    value={expenseData.date ? moment(expenseData.date).format("MMM Do, YYYY") : null}
-                    disabled={displayMode === 'view' ? true : false}
-                    selected={expenseData.date ? new Date(expenseData.date) : null}
-                    onChange={(date) => setExpenseData({ ...expenseData, date: date })}
-                    showIcon
-                    todayButton="Today"
-                />
+                <div className='d-flex justify-content-between'>
+                    <StyledDatePicker
+                        value={expenseData.date ? moment(expenseData.date).format("MMM Do, YYYY") : null}
+                        disabled={displayMode === 'view' ? true : false}
+                        selected={expenseData.date ? new Date(expenseData.date) : null}
+                        onChange={(date) => setExpenseData({ ...expenseData, date: date })}
+                        showIcon
+                        todayButton="Today"
+                    />
+                    <StyledCreatable
+                        options={options}
+                        onChange={(inputValue) => setExpenseData({ ...expenseData, category: inputValue ? inputValue.value : null})}
+                        formatCreateLabel={(inputValue) => `Add new Category: ${inputValue}`}
+                        placeholder='Category'
+                        isClearable={true}
+                        isSearchable={true}
+                    />
+                </div>
                 <FormRow
                     type="text"
                     name="note"
                     labelText='Note'
                     value={expenseData.note}
-                    handleChange={handleExpenseInput}
-                    disabled={displayMode === 'view' ? true : false}
-                />
-                <FormRow
-                    type="text"
-                    name="amount"
-                    labelText='Amount'
-                    value={expenseData.amount}
                     handleChange={handleExpenseInput}
                     disabled={displayMode === 'view' ? true : false}
                 />
@@ -105,16 +117,29 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                     handleChange={handleExpenseInput}
                     disabled={displayMode === 'view' ? true : false}
                 />
-                <div className='d-flex flex-row gap-2'>
+                <FormRow
+                    type="text"
+                    name="amount"
+                    labelText='Amount'
+                    value={expenseData.amount}
+                    handleChange={handleExpenseInput}
+                    disabled={displayMode === 'view' ? true : false}
+                />
+                <div className='d-flex flex-row gap-3' style={{ marginTop: '0.3rem' }}>
                     <label>
                         Split It
                     </label>
                     <Form.Check
                         type="switch"
-                        id="custom-switch"
                         disabled={displayMode === 'view' ? true : false}
+                        onChange={(event) => {
+                            setIsSplitExpense(event.target.checked)
+                        }}
                     />
                 </div>
+                {isSplitExpense && (
+                    <p>12333</p>
+                )}
 
             </Modal.Body>
             <Modal.Footer>
