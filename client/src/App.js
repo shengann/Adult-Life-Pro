@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AppLayout, ProtectedRoute, Home, Expenses, FinancialReport, ToDo } from './pages';
+import './index.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Route index element={<Navigate replace to="home" />} />
+          <Route path="home" element={<Home />} />
+          <Route path="expenses" element={<Expenses />} />
+          <Route path="financial-report" element={<FinancialReport />} />
+          <Route path="to-do" element={<ToDo />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
