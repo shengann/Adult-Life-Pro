@@ -8,6 +8,8 @@ import Form from 'react-bootstrap/Form';
 import { useUpdateExpenseMutation } from '../slices/expenseSlice';
 import DatePicker from "react-datepicker";
 import Creatable from 'react-select/creatable';
+import Select from 'react-select';
+import { Row, Col } from 'react-bootstrap';
 
 const StyledDatePicker = styled(DatePicker)`
   border: solid 1px #ccc;
@@ -17,10 +19,32 @@ const StyledDatePicker = styled(DatePicker)`
 `;
 
 const StyledCreatable = styled(Creatable)`
-  width: 70%;
+  width: 75%;
 `;
 
 const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose }) => {
+    const categoryOptions = [
+        { value: 'Groceries', label: 'Groceries' },
+        { value: 'Dining Out', label: 'Dining Out' },
+        { value: 'Transportation', label: 'Transportation' }
+    ]
+    const splitOptions = [
+        { value: 'Equally', label: 'Equally' },
+        { value: 'Unequally', label: 'Unequally' },
+    ]
+    const paidByOptions = [
+        { value: 'You', label: 'You' }
+    ]
+    const splitGroupOptions = []
+
+    const [splitExpenseData, setSplitExpenseData] = useState({ paidBy: null, splitOptions: null, splitGroup: [] })
+    const handleSplitGroupInput = (splitGroup) => {
+        setSplitExpenseData({
+            ...splitExpenseData,
+            splitGroup: splitGroup.map((value) => ({ name: value, amount: 0 })),
+        });
+    }
+
     const initialState = {
         id: expenseDetails._id,
         amount: expenseDetails.amount,
@@ -49,15 +73,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
             });
     };
 
-    const options = [
-        { value: 'Groceries', label: 'Groceries' },
-        { value: 'Dining Out', label: 'Dining Out' },
-        { value: 'Transportation', label: 'Transportation' }
-    ]
-
     const [isSplitExpense, setIsSplitExpense] = useState(false);
-    console.log("expenseData", expenseData.category)
-
     return (
         <Modal
             show={showPopup}
@@ -77,10 +93,11 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                         todayButton="Today"
                     />
                     <StyledCreatable
-                        options={options}
-                        onChange={(inputValue) => setExpenseData({ ...expenseData, category: inputValue ? inputValue.value : null})}
-                        formatCreateLabel={(inputValue) => `Add new Category: ${inputValue}`}
                         placeholder='Category'
+                        defaultValue={expenseData.category ? { value: expenseData.category, label: expenseData.category } : ''}
+                        options={categoryOptions}
+                        onChange={(inputValue) => setExpenseData({ ...expenseData, category: inputValue ? inputValue.value : null })}
+                        formatCreateLabel={(inputValue) => `Add new Category: ${inputValue}`}
                         isClearable={true}
                         isSearchable={true}
                     />
@@ -90,14 +107,6 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                     name="note"
                     labelText='Note'
                     value={expenseData.note}
-                    handleChange={handleExpenseInput}
-                    disabled={displayMode === 'view' ? true : false}
-                />
-                <FormRow
-                    type="text"
-                    name="category"
-                    labelText='category'
-                    value={expenseData.category}
                     handleChange={handleExpenseInput}
                     disabled={displayMode === 'view' ? true : false}
                 />
@@ -117,30 +126,78 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                     handleChange={handleExpenseInput}
                     disabled={displayMode === 'view' ? true : false}
                 />
-                <FormRow
-                    type="text"
-                    name="amount"
-                    labelText='Amount'
-                    value={expenseData.amount}
-                    handleChange={handleExpenseInput}
-                    disabled={displayMode === 'view' ? true : false}
-                />
-                <div className='d-flex flex-row gap-3' style={{ marginTop: '0.3rem' }}>
-                    <label>
-                        Split It
-                    </label>
-                    <Form.Check
-                        type="switch"
+                <div className='d-flex gap-2 my-2'>
+                    <label className='align-self-center'>Amount</label>
+                    <FormRow
+                        type="text"
+                        value={expenseData.amount}
+                        handleChange={handleExpenseInput}
                         disabled={displayMode === 'view' ? true : false}
-                        onChange={(event) => {
-                            setIsSplitExpense(event.target.checked)
-                        }}
                     />
+                    <div className='d-flex flex-row gap-2 align-self-center'>
+                        <label>
+                            Split It
+                        </label>
+                        <Form.Check
+                            type="switch"
+                            disabled={displayMode === 'view' ? true : false}
+                            onChange={(event) => {
+                                setIsSplitExpense(event.target.checked)
+                            }}
+                        />
+                    </div>
                 </div>
                 {isSplitExpense && (
-                    <p>12333</p>
-                )}
+                    <>
+                        <div className='d-flex gap-2 my-2'>
+                            <div className='align-self-center'>Paid By</div>
+                            <Creatable
+                                options={paidByOptions}
+                                isClearable={true}
+                                onChange={(inputValue) => setSplitExpenseData({ ...splitExpenseData, paidBy: inputValue ? inputValue.value : null })}
 
+                            />
+                            <div className='align-self-center'>& Split</div>
+                            <Select
+                                options={splitOptions}
+                                onChange={(inputValue) => setSplitExpenseData({ ...splitExpenseData, splitOptions: inputValue ? inputValue.value : null })}
+                            />
+
+                        </div>
+
+                        <div className='d-flex gap-2 my-2'>
+                            <div className='align-self-center'>Split It Among</div>
+                            <StyledCreatable
+                                options={splitGroupOptions}
+                                isClearable={true}
+                                onChange={(inputValue) => handleSplitGroupInput(inputValue.map(item => item.value))}
+                                isMulti={true}
+                                formatCreateLabel={(inputValue) => `Add new Friend(s): ${inputValue}`}
+                            />
+                        </div>
+                        <Row>
+                            {splitExpenseData.splitOptions === 'Unequally' && splitExpenseData.splitGroup.map((groupItem, index) => (
+                                <Col key={index} className='d-flex gap-2 mt-2 justify-content-between' md={6}>
+                                    <div className='align-self-center'>{groupItem.name}</div>
+                                    <FormRow
+                                        type='text'
+                                        value={groupItem.amount}
+                                        handleChange={(e) =>
+                                            setSplitExpenseData((prevData) => {
+                                                const updatedSplitGroup = [...prevData.splitGroup];
+                                                updatedSplitGroup[index].amount = e.target.value;
+                                                return { ...prevData, splitGroup: updatedSplitGroup };
+                                            })
+                                        }
+                                        disabled={displayMode === 'view' ? true : false}
+                                        width='9vw'
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                        
+                    </>
+                )}
             </Modal.Body>
             <Modal.Footer>
                 <Button className="btn btn-sm" variant="secondary" onClick={onClose}>
