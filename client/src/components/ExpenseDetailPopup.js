@@ -39,12 +39,20 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
 
     const [splitExpenseData, setSplitExpenseData] = useState({ paidBy: null, splitOptions: null, splitGroup: [] })
     const handleSplitGroupInput = (splitGroup) => {
-        setSplitExpenseData({
-            ...splitExpenseData,
-            splitGroup: splitGroup.map((value) => ({ name: value, amount: 0 })),
-        });
-    }
+        const initialSplitGroup = splitExpenseData.splitGroup.map((item) => item.name);
 
+        if (initialSplitGroup.length < splitGroup.length) {
+            const newSplitGroup = splitGroup.filter(item => !initialSplitGroup.includes(item));
+            const updatedSplitGroup = [...splitExpenseData.splitGroup, { name: newSplitGroup[0], amount: null }];
+
+            setSplitExpenseData({ ...splitExpenseData, splitGroup: updatedSplitGroup });
+        } else if (initialSplitGroup.length > splitGroup.length) {
+            const deletedSplitGroup = initialSplitGroup.filter(item => !splitGroup.includes(item));
+            const updatedSplitGroup = splitExpenseData.splitGroup.filter(item => item.name !== deletedSplitGroup[0]);
+
+            setSplitExpenseData({ ...splitExpenseData, splitGroup: updatedSplitGroup });
+        }
+    };
     const initialState = {
         id: expenseDetails._id,
         amount: expenseDetails.amount,
@@ -58,7 +66,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
     const handleExpenseInput = (e) => {
         const { name, value } = e.target;
         setExpenseData((state) => ({
-            ...state,
+            ...expenseData,
             [name]: value
         }));
 
@@ -182,31 +190,34 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                                     <FormRow
                                         type='text'
                                         value={groupItem.amount}
-                                        handleChange={(e) =>
-                                            setSplitExpenseData((prevData) => {
-                                                const updatedSplitGroup = [...prevData.splitGroup];
-                                                updatedSplitGroup[index].amount = e.target.value;
-                                                return { ...prevData, splitGroup: updatedSplitGroup };
-                                            })
-                                        }
+                                        handleChange={(e) => {
+                                            const updatedSplitGroup = [...splitExpenseData.splitGroup];
+                                            updatedSplitGroup[index].amount = e.target.value
+                                            setSplitExpenseData({ ...splitExpenseData, splitGroup: updatedSplitGroup })
+                                        }}
                                         disabled={displayMode === 'view' ? true : false}
                                         width='9vw'
                                     />
                                 </Col>
                             ))}
                         </Row>
-                        
+
                     </>
                 )}
             </Modal.Body>
-            <Modal.Footer>
-                <Button className="btn btn-sm" variant="secondary" onClick={onClose}>
-                    Close
-                </Button>
-                <Button className="btn btn-sm" variant="primary" onClick={handleSubmit}>
-                    Save Changes
-                </Button>
-            </Modal.Footer>
+            {
+                displayMode !== 'view' && (
+                    <Modal.Footer>
+                        <Button className="btn btn-sm" variant="secondary" onClick={onClose}>
+                            Close
+                        </Button>
+                        <Button className="btn btn-sm" variant="primary" onClick={handleSubmit}>
+                            Save Changes
+                        </Button>
+                    </Modal.Footer>
+                )
+            }
+
         </Modal>
     )
 }
