@@ -11,7 +11,7 @@ const Section = styled.section`
 const FormRow = ({ type, name, value, handleChange, labelText,disabled, width}) => {
 
     return (
-        <Section className="d-flex flex-column gap-1">
+        <Section className="d-flex flex-column gap-1" width={width}>
             <label htmlFor={name}>
                 {labelText || name}
             </label>
