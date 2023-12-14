@@ -1,11 +1,15 @@
 import styled from 'styled-components';
-const Section = styled.section`
+
+const FormRow = ({ type, name, value, handleChange, labelText,disabled, width}) => {
+    console.log('width',width)
+    const Section = styled.section`
    .input{
       border:solid 1px #ccc;
       border-radius: 10px;
+      width:  ${width};
    }
 `
-const FormRow = ({ type, name, value, handleChange, labelText,disabled }) => {
+
     return (
         <Section className="d-flex flex-column gap-1">
             <label htmlFor={name}>
