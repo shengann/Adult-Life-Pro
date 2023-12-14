@@ -94,7 +94,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                 <div className='d-flex justify-content-between'>
                     <StyledDatePicker
                         value={expenseData.date ? moment(expenseData.date).format("MMM Do, YYYY") : null}
-                        disabled={displayMode === 'view' ? true : false}
+                        disabled={displayMode === 'view'}
                         selected={expenseData.date ? new Date(expenseData.date) : null}
                         onChange={(date) => setExpenseData({ ...expenseData, date: date })}
                         showIcon
@@ -108,6 +108,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                         formatCreateLabel={(inputValue) => `Add new Category: ${inputValue}`}
                         isClearable={true}
                         isSearchable={true}
+                        isDisabled={displayMode === 'view'}
                     />
                 </div>
                 <FormRow
@@ -116,7 +117,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                     labelText='Note'
                     value={expenseData.note}
                     handleChange={handleExpenseInput}
-                    disabled={displayMode === 'view' ? true : false}
+                    disabled={displayMode === 'view'}
                 />
                 <FormRow
                     type="text"
@@ -124,7 +125,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                     labelText='Account'
                     value=''
                     handleChange={handleExpenseInput}
-                    disabled={displayMode === 'view' ? true : false}
+                    disabled={displayMode === 'view'}
                 />
                 <FormRow
                     name="description"
@@ -132,7 +133,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                     type="text"
                     value={expenseData.description}
                     handleChange={handleExpenseInput}
-                    disabled={displayMode === 'view' ? true : false}
+                    disabled={displayMode === 'view'}
                 />
                 <div className='d-flex gap-2 my-2'>
                     <label className='align-self-center'>Amount</label>
@@ -140,7 +141,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                         type="text"
                         value={expenseData.amount}
                         handleChange={handleExpenseInput}
-                        disabled={displayMode === 'view' ? true : false}
+                        disabled={displayMode === 'view'}
                     />
                     <div className='d-flex flex-row gap-2 align-self-center'>
                         <label>
@@ -148,7 +149,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                         </label>
                         <Form.Check
                             type="switch"
-                            disabled={displayMode === 'view' ? true : false}
+                            disabled={displayMode === 'view'}
                             onChange={(event) => {
                                 setIsSplitExpense(event.target.checked)
                             }}
@@ -163,12 +164,13 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                                 options={paidByOptions}
                                 isClearable={true}
                                 onChange={(inputValue) => setSplitExpenseData({ ...splitExpenseData, paidBy: inputValue ? inputValue.value : null })}
-
+                                isDisabled={displayMode === 'view'}
                             />
                             <div className='align-self-center'>& Split</div>
                             <Select
                                 options={splitOptions}
                                 onChange={(inputValue) => setSplitExpenseData({ ...splitExpenseData, splitOptions: inputValue ? inputValue.value : null })}
+                                isDisabled={displayMode === 'view'}
                             />
 
                         </div>
@@ -181,6 +183,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                                 onChange={(inputValue) => handleSplitGroupInput(inputValue.map(item => item.value))}
                                 isMulti={true}
                                 formatCreateLabel={(inputValue) => `Add new Friend(s): ${inputValue}`}
+                                isDisabled={displayMode === 'view'}
                             />
                         </div>
                         <Row>
@@ -188,14 +191,14 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                                 <Col key={index} className='d-flex gap-2 mt-2 justify-content-between' md={6}>
                                     <div className='align-self-center'>{groupItem.name}</div>
                                     <FormRow
-                                        type='text'
+                                        type='number'
                                         value={groupItem.amount}
                                         handleChange={(e) => {
                                             const updatedSplitGroup = [...splitExpenseData.splitGroup];
                                             updatedSplitGroup[index].amount = e.target.value
                                             setSplitExpenseData({ ...splitExpenseData, splitGroup: updatedSplitGroup })
                                         }}
-                                        disabled={displayMode === 'view' ? true : false}
+                                        disabled={displayMode === 'view'}
                                         width='9vw'
                                     />
                                 </Col>
