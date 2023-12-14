@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
-const FormRow = ({ type, name, value, handleChange, labelText,disabled, width}) => {
-    console.log('width',width)
-    const Section = styled.section`
-   .input{
-      border:solid 1px #ccc;
+const Section = styled.section`
+   .input {
+      border: solid 1px #ccc;
       border-radius: 10px;
-      width:  ${width};
+      width: ${(props) => props.width};
    }
-`
+`;
+
+const FormRow = ({ type, name, value, handleChange, labelText,disabled, width}) => {
 
     return (
         <Section className="d-flex flex-column gap-1">
