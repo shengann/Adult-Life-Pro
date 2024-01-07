@@ -5,20 +5,21 @@ const Section = styled.section`
       border: solid 1px #ccc;
       border-radius: 10px;
       width: ${(props) => props.width};
+      text-align: ${(props) => props.textAlign};
    }
 `;
 
-const FormRow = ({ type, name, value, handleChange, labelText,disabled, width}) => {
+const FormRow = ({ type, name, value, handleChange, labelText, disabled, width, textAlign }) => {
 
     return (
-        <Section className="d-flex flex-column gap-1" width={width}>
+        <Section className="d-flex flex-column gap-1" width={width} textAlign={textAlign}>
             <label htmlFor={name}>
-                {labelText || name}
+                {labelText }
             </label>
             <input
                 type={type}
-                value={value}
-                name={name}
+                value={value}              
+                id={name}
                 onChange={handleChange}
                 className='input'
                 disabled={disabled}
