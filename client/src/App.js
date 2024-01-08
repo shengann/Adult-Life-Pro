@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AppLayout, ProtectedRoute, Home, Expenses, FinancialReport, ToDo } from './pages';
+import { AppLayout, ProtectedRoute, Home, Expenses, Friends } from './pages';
 import './index.css';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -19,8 +19,7 @@ function App() {
           <Route index element={<Navigate replace to="home" />} />
           <Route path="home" element={<Home />} />
           <Route path="expenses" element={<Expenses />} />
-          <Route path="financial-report" element={<FinancialReport />} />
-          <Route path="to-do" element={<ToDo />} />
+          <Route path="friends" element={<Friends />} />
         </Route>
       </Routes>
     </BrowserRouter>

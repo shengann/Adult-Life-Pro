@@ -1,8 +1,7 @@
 import { NavLink } from 'react-router-dom';
-import { LuListTodo } from "react-icons/lu";
-import { TbReportAnalytics } from "react-icons/tb";
 import { BiMoney } from "react-icons/bi";
 import { AiOutlineHome } from "react-icons/ai";
+import { FaUserFriends } from "react-icons/fa";
 import styled from 'styled-components';
 
 const StyledSection = styled.section`
@@ -31,9 +30,8 @@ const StyledSection = styled.section`
 const NavList = () => {
   const Lists = [
     { key: 1, title: 'Home', path: '/', icon: <AiOutlineHome /> },
-    { key: 2, title: 'Expenses', path: '/expenses', icon: <TbReportAnalytics /> },
-    { key: 3, title: 'Financial Report', path: '/financial-report', icon: <LuListTodo /> },
-    { key: 4, title: 'To-do', path: '/to-do', icon: <BiMoney /> },
+    { key: 2, title: 'Expenses', path: '/expenses', icon: <BiMoney /> },
+    { key: 4, title: 'Friends', path: '/friends', icon: <FaUserFriends /> },
 
   ]
   return (
