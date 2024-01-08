@@ -1,5 +1,3 @@
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import FormRow from "./FormRow"
 import styled from 'styled-components';
 import moment from 'moment'
@@ -9,7 +7,10 @@ import { useUpdateExpenseMutation } from '../slices/expenseSlice';
 import DatePicker from "react-datepicker";
 import Creatable from 'react-select/creatable';
 import Select from 'react-select';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Modal, Button } from 'react-bootstrap';
+import { checkValidUnequallySplitExpense, splitExpense } from "../utils/splitExpense";
+import handleCreatableInput from "../utils/handleCreatableInput";
+
 
 const StyledDatePicker = styled(DatePicker)`
   border: solid 1px #ccc;
@@ -35,31 +36,18 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
     const paidByOptions = [
         { value: 'You', label: 'You' }
     ]
-    const splitGroupOptions = []
 
-    const [splitExpenseData, setSplitExpenseData] = useState({ paidBy: null, splitOptions: null, splitGroup: [] })
-    const handleSplitGroupInput = (splitGroup) => {
-        const initialSplitGroup = splitExpenseData.splitGroup.map((item) => item.name);
-
-        if (initialSplitGroup.length < splitGroup.length) {
-            const newSplitGroup = splitGroup.filter(item => !initialSplitGroup.includes(item));
-            const updatedSplitGroup = [...splitExpenseData.splitGroup, { name: newSplitGroup[0], amount: null }];
-
-            setSplitExpenseData({ ...splitExpenseData, splitGroup: updatedSplitGroup });
-        } else if (initialSplitGroup.length > splitGroup.length) {
-            const deletedSplitGroup = initialSplitGroup.filter(item => !splitGroup.includes(item));
-            const updatedSplitGroup = splitExpenseData.splitGroup.filter(item => item.name !== deletedSplitGroup[0]);
-
-            setSplitExpenseData({ ...splitExpenseData, splitGroup: updatedSplitGroup });
-        }
-    };
     const initialState = {
         id: expenseDetails._id,
         amount: expenseDetails.amount,
         category: expenseDetails.category,
         date: expenseDetails.date,
         description: expenseDetails.description,
-        note: expenseDetails.note
+        note: expenseDetails.note,
+        paidBy: null,
+        splitOptions: null,
+        splitGroup: [],
+        personalExpense : null
     }
     const [expenseData, setExpenseData] = useState(initialState);
 
@@ -82,6 +70,24 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
     };
 
     const [isSplitExpense, setIsSplitExpense] = useState(false);
+
+    const handleSplitGroupInput = (splitGroup) => {
+        const updatedSplitGroup = handleCreatableInput(splitGroup, expenseData)
+        setExpenseData({ ...expenseData, splitGroup: updatedSplitGroup });
+    };
+
+    const splitTotalExpense = () => {
+        if (expenseData.splitOptions === 'Unequally'){
+            const ValidUnequallySplitExpense = checkValidUnequallySplitExpense(expenseData.amount, expenseData.splitGroup)
+        } else {
+            const personalExpense = splitExpense(expenseData.amount, expenseData.splitOptions, expenseData.splitGroup)
+            console.log(personalExpense)
+            setExpenseData({ ...expenseData, personalExpense: personalExpense });
+        }
+        
+        console.log(expenseData)
+    }
+
     return (
         <Modal
             show={showPopup}
@@ -138,7 +144,8 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                 <div className='d-flex gap-2 my-2'>
                     <label className='align-self-center'>Amount</label>
                     <FormRow
-                        type="text"
+                        name="amount"
+                        type="number"
                         value={expenseData.amount}
                         handleChange={handleExpenseInput}
                         disabled={displayMode === 'view'}
@@ -163,13 +170,13 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                             <Creatable
                                 options={paidByOptions}
                                 isClearable={true}
-                                onChange={(inputValue) => setSplitExpenseData({ ...splitExpenseData, paidBy: inputValue ? inputValue.value : null })}
+                                onChange={(inputValue) => setExpenseData({ ...expenseData, paidBy: inputValue ? inputValue.value : null })}
                                 isDisabled={displayMode === 'view'}
                             />
                             <div className='align-self-center'>& Split</div>
                             <Select
                                 options={splitOptions}
-                                onChange={(inputValue) => setSplitExpenseData({ ...splitExpenseData, splitOptions: inputValue ? inputValue.value : null })}
+                                onChange={(inputValue) => setExpenseData({ ...expenseData, splitOptions: inputValue ? inputValue.value : null })}
                                 isDisabled={displayMode === 'view'}
                             />
 
@@ -178,7 +185,6 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                         <div className='d-flex gap-2 my-2'>
                             <div className='align-self-center'>Split It Among</div>
                             <StyledCreatable
-                                options={splitGroupOptions}
                                 isClearable={true}
                                 onChange={(inputValue) => handleSplitGroupInput(inputValue.map(item => item.value))}
                                 isMulti={true}
@@ -187,23 +193,25 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                             />
                         </div>
                         <Row>
-                            {splitExpenseData.splitOptions === 'Unequally' && splitExpenseData.splitGroup.map((groupItem, index) => (
+                            {expenseData.splitOptions === 'Unequally' && expenseData.splitGroup.map((groupItem, index) => (
                                 <Col key={index} className='d-flex gap-2 mt-2 justify-content-between' md={6}>
                                     <div className='align-self-center'>{groupItem.name}</div>
                                     <FormRow
                                         type='number'
                                         value={groupItem.amount}
                                         handleChange={(e) => {
-                                            const updatedSplitGroup = [...splitExpenseData.splitGroup];
+                                            const updatedSplitGroup = [...expenseData.splitGroup];
                                             updatedSplitGroup[index].amount = e.target.value
-                                            setSplitExpenseData({ ...splitExpenseData, splitGroup: updatedSplitGroup })
+                                            setExpenseData({ ...expenseData, splitGroup: updatedSplitGroup })
                                         }}
                                         disabled={displayMode === 'view'}
-                                        width='9vw'
+                                        width='7.5vw'
+                                        textAlign='right'
                                     />
                                 </Col>
                             ))}
                         </Row>
+                        <p>Your Expense : {expenseData.personalExpense}</p>
 
                     </>
                 )}
@@ -214,7 +222,12 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                         <Button className="btn btn-sm" variant="secondary" onClick={onClose}>
                             Close
                         </Button>
-                        <Button className="btn btn-sm" variant="primary" onClick={handleSubmit}>
+                        {isSplitExpense &&
+                            <Button className="btn btn-sm" variant="info" onClick={splitTotalExpense}>
+                                Split It
+                            </Button>
+                        }
+                        <Button className="btn btn-sm" variant="success" onClick={handleSubmit}>
                             Save Changes
                         </Button>
                     </Modal.Footer>
