@@ -1,16 +1,14 @@
 import FormRow from "./FormRow"
 import styled from 'styled-components';
 import moment from 'moment'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useUpdateExpenseMutation } from '../slices/expenseSlice';
 import DatePicker from "react-datepicker";
 import Creatable from 'react-select/creatable';
 import Select from 'react-select';
 import { Row, Col, Modal, Button } from 'react-bootstrap';
-import { checkValidUnequallySplitExpense, splitExpense } from "../utils/splitExpense";
-import handleCreatableInput from "../utils/handleCreatableInput";
-
+import { handleCreatableInput, splitExpense } from "../utils";
 
 const StyledDatePicker = styled(DatePicker)`
   border: solid 1px #ccc;
@@ -46,8 +44,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         note: expenseDetails.note,
         paidBy: null,
         splitOptions: null,
-        splitGroup: [],
-        personalExpense : null
+        splitGroup: []
     }
     const [expenseData, setExpenseData] = useState(initialState);
 
@@ -76,17 +73,12 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         setExpenseData({ ...expenseData, splitGroup: updatedSplitGroup });
     };
 
-    const splitTotalExpense = () => {
-        if (expenseData.splitOptions === 'Unequally'){
-            const ValidUnequallySplitExpense = checkValidUnequallySplitExpense(expenseData.amount, expenseData.splitGroup)
-        } else {
-            const personalExpense = splitExpense(expenseData.amount, expenseData.splitOptions, expenseData.splitGroup)
-            console.log(personalExpense)
-            setExpenseData({ ...expenseData, personalExpense: personalExpense });
+    useEffect(() => {
+        if (expenseData.splitGroup && expenseData.splitOptions && expenseData.amount) {
+            const personalExpense = splitExpense(expenseData.amount, expenseData.splitOptions, expenseData.splitGroup);
+            setExpenseData((prevData) => ({ ...prevData, personalExpense }));
         }
-        
-        console.log(expenseData)
-    }
+    }, [expenseData.splitGroup, expenseData.splitOptions, expenseData.amount]);
 
     return (
         <Modal
@@ -222,11 +214,6 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                         <Button className="btn btn-sm" variant="secondary" onClick={onClose}>
                             Close
                         </Button>
-                        {isSplitExpense &&
-                            <Button className="btn btn-sm" variant="info" onClick={splitTotalExpense}>
-                                Split It
-                            </Button>
-                        }
                         <Button className="btn btn-sm" variant="success" onClick={handleSubmit}>
                             Save Changes
                         </Button>
