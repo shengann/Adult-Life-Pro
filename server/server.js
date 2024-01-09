@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv'
 import ConnectDB from './config/connectDb.js'
 import ExpensesRouter from './routes/expensesRoute.js'
+import FriendsRouter from "./routes/friendsRoute.js"
 
 dotenv.config()
 
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
     res.send('welcome')
 })
 app.use('/api/v1/expenses', ExpensesRouter)
+app.use('/api/v1/friends', FriendsRouter)
 
 const start = async () => {
     try {
