@@ -19,6 +19,19 @@ const ExpensesSchema = new mongoose.Schema({
     },
     description: {
         type: String,
+    },
+    paidBy: { 
+        type: String
+    },
+    personalExpense: {
+        type: Number,
+    },
+    splitGroup: {
+        type: Array,
+    },
+    splitOptions: {
+        type:String,
+        enum: ['Equally','Unequally'],
     }
 },
     { timestamps: true }

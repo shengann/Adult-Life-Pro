@@ -2,12 +2,11 @@ import FormRow from "./FormRow"
 import styled from 'styled-components';
 import moment from 'moment'
 import { useEffect, useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import { useUpdateExpenseMutation } from '../slices/expenseSlice';
+import { useUpdateExpenseMutation, useAddExpenseMutation } from '../slices/expenseSlice';
 import DatePicker from "react-datepicker";
 import Creatable from 'react-select/creatable';
 import Select from 'react-select';
-import { Row, Col, Modal, Button } from 'react-bootstrap';
+import { Row, Col, Modal, Button, Form } from 'react-bootstrap';
 import { handleCreatableInput, splitExpense } from "../utils";
 
 const StyledDatePicker = styled(DatePicker)`
@@ -42,11 +41,14 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         date: expenseDetails.date,
         description: expenseDetails.description,
         note: expenseDetails.note,
-        paidBy: null,
-        splitOptions: null,
-        splitGroup: []
+        paidBy: expenseDetails.paidBy,
+        splitOptions: expenseDetails.splitOptions,
+        splitGroup: expenseDetails.splitGroup,
+        personalExpense: expenseDetails.personalExpense
     }
     const [expenseData, setExpenseData] = useState(initialState);
+    console.log("expenseData", expenseData.splitOptions)
+    console.log("expenseData", expenseData.paidBy)
 
     const handleExpenseInput = (e) => {
         const { name, value } = e.target;
@@ -57,13 +59,25 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
 
     };
     const [updateExpense] = useUpdateExpenseMutation()
+    const [createExpense] = useAddExpenseMutation()
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        updateExpense({ ...expenseData })
-            .then(() => onClose())
-            .catch((error) => {
-                console.error("Error updating expense:", error);
-            });
+        if (displayMode === "edit") {
+            updateExpense({ ...expenseData })
+                .then(() => onClose())
+                .catch((error) => {
+                    console.error("Error updating expense:", error);
+                });
+        } else if (displayMode === "add") {
+            console.log({ ...expenseData })
+            createExpense({ ...expenseData })
+                .then(() => onClose())
+                .catch((error) => {
+                    console.error("Error creating expense:", error);
+                });
+        }
+
     };
 
     const [isSplitExpense, setIsSplitExpense] = useState(false);
@@ -72,6 +86,12 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         const updatedSplitGroup = handleCreatableInput(splitGroup, expenseData)
         setExpenseData({ ...expenseData, splitGroup: updatedSplitGroup });
     };
+
+    useEffect(() => {
+        if (expenseData.personalExpense && displayMode !== "add") {
+            setIsSplitExpense(true);
+        }
+    }, [expenseData.personalExpense, displayMode]);
 
     useEffect(() => {
         if (expenseData.splitGroup && expenseData.splitOptions && expenseData.amount) {
@@ -160,6 +180,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                         <div className='d-flex gap-2 my-2'>
                             <div className='align-self-center'>Paid By</div>
                             <Creatable
+                                defaultValue={expenseData.paidBy ? { value: expenseData.paidBy, label: expenseData.paidBy } : ''}
                                 options={paidByOptions}
                                 isClearable={true}
                                 onChange={(inputValue) => setExpenseData({ ...expenseData, paidBy: inputValue ? inputValue.value : null })}
@@ -167,6 +188,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                             />
                             <div className='align-self-center'>& Split</div>
                             <Select
+                                defaultValue={expenseData.splitOptions ? { value: expenseData.splitOptions, label: expenseData.splitOptions } : ''}
                                 options={splitOptions}
                                 onChange={(inputValue) => setExpenseData({ ...expenseData, splitOptions: inputValue ? inputValue.value : null })}
                                 isDisabled={displayMode === 'view'}
@@ -215,7 +237,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                             Close
                         </Button>
                         <Button className="btn btn-sm" variant="success" onClick={handleSubmit}>
-                            Save Changes
+                            {displayMode === 'edit' ? "Save Changes" : "Add Expense"}
                         </Button>
                     </Modal.Footer>
                 )
