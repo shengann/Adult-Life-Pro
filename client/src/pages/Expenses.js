@@ -6,7 +6,6 @@ import ExpenseDetailPopup from '../components/ExpenseDetailPopup';
 import { useState } from 'react';
 
 const Section = styled.section`
-font-family: Poppins, sans-serif;
 width: 75%;
 
 @media (max-width: 768px) {

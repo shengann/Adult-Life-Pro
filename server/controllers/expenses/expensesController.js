@@ -1,17 +1,23 @@
-import Expense from '../models/expensesModel.js';
+import Expense from '../../models/expensesModel.js';
+import { expenseUpdateFriendAmount } from './service.js';
 
 const createExpense = async (req, res) => {
     try {
-        const { date, amount, category } = req.body
+        const { date, amount, category, splitOptions, splitGroup, personalExpense, paidBy } = req.body
 
         if (!amount || !category || !date) {
             res.status(400).json({ error: 'Please Provide all values' });
             return;
         }
+
+        if (splitOptions && splitGroup && personalExpense && paidBy) {
+            const friendUpdates = splitGroup.map(item => expenseUpdateFriendAmount(item.name, item.amount, paidBy));
+            await Promise.all(friendUpdates);
+        }
         const expense = await Expense.create(req.body)
         res.status(201).json({ expense })
     } catch (e) {
-        console.error(e)
+        console.error("Error creating expense:", e);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 
@@ -65,7 +71,7 @@ const updateExpense = async (req, res) => {
             res.status(400).json({ error: 'Please Provide all values' });
             return;
         }
-        const expense = await Expense.findById(expenseId );
+        const expense = await Expense.findById(expenseId);
 
         if (!expense) {
             res.status(400)
