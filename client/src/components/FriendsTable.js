@@ -1,12 +1,21 @@
 import Table from 'react-bootstrap/Table';
 import { RxAvatar } from "react-icons/rx";
+import styled from 'styled-components';
+
+const Section = styled.section`
+  width: 90%;
+
+  @media (min-width: 640px) {
+      width: 45%;
+  }
+`
 const FriendsTable = ({ data, title }) => {
   return (
-    <div className="table-responsive">
-      <Table hover className="table rounded-3 overflow-hidden">
-        <div className="border rounded-3 mb-2 bg-dark bg-gradient text-white" style={{ height: '5vh' }}>
-          <span className="ms-2">{title}</span>
-        </div>
+    <Section>
+      <div className="border rounded-3 mb-2 bg-dark bg-gradient text-white w-50" style={{ height: '5vh' }}>
+        <span className="ms-2">{title}</span>
+      </div>
+      <Table hover className="table rounded-3 overflow-hidden table-responsive">
         <tbody>
           {data && data.length > 0 && data.map((item, index) => {
             return (
@@ -20,7 +29,7 @@ const FriendsTable = ({ data, title }) => {
           }
         </tbody>
       </Table>
-    </div>
+    </Section>
 
   )
 }

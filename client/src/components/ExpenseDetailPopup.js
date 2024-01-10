@@ -12,7 +12,6 @@ import { handleCreatableInput, splitExpense } from "../utils";
 const StyledDatePicker = styled(DatePicker)`
   border: solid 1px #ccc;
   border-radius: 10px;
-  height: 5.5vh;
   width: 95%;
 `;
 

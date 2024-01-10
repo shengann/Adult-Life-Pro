@@ -8,7 +8,6 @@ import { MdDelete, MdEdit } from "react-icons/md";
 const Section = styled.section`
 font-family: Poppins, sans-serif;
 .table{
-  border-radius: 3rem; 
   font-weight: 500;
   font-size: 1.5vh;
   table-layout: fixed;

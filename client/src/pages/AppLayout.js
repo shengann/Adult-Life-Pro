@@ -7,7 +7,7 @@ const AppLayout = () => {
       <Sidebar />
       <main className='flex-grow-1 overflow-auto'>
         <Header />
-        <Outlet className="justify-content-center"/>
+        <Outlet />
       </main>
     </div>
   );

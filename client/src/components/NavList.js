@@ -46,7 +46,7 @@ const NavList = () => {
           >
             <div className="item">
               <span className='icon'>{icon}</span>
-              <span className='title'>{title}</span>
+              <span className='title ms-2'>{title}</span>
             </div>
           </NavLink>)
       })}

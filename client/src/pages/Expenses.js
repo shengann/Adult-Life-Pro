@@ -4,12 +4,13 @@ import { useGetExpensesQuery } from '../slices/expenseSlice';
 import { ExpenseTable } from '../components';
 import ExpenseDetailPopup from '../components/ExpenseDetailPopup';
 import { useState } from 'react';
+import { IoAdd } from "react-icons/io5";
 
 const Section = styled.section`
 width: 75%;
 
 @media (max-width: 768px) {
-    width: 95%;
+    width: 100%;
   }
 `;
 
@@ -19,7 +20,7 @@ const Expenses = () => {
   const [selectedItems, setSelectedItems] = useState(null);
   const [displayMode, setDisplayMode] = useState(null);
 
-  const handleShowDetails = (items,selectedDisplayMode) => {
+  const handleShowDetails = (items, selectedDisplayMode) => {
     setSelectedItems(items);
     setDisplayMode(selectedDisplayMode)
     setShowExpenseDetailPopup(true);
@@ -41,25 +42,27 @@ const Expenses = () => {
             onClose={handleClosePopup}
           />
         )}
-        <Section>
-          <div className="text-end mx-2">
-            <button 
-              className="btn btn-primary btn-sm"
+        <Container fluid className="d-flex flex-column align-items-center mt-3">
+          <div className="d-flex justify-content-between w-75">
+            <div></div>
+            <div>Oct 2023</div>
+            <button
+              className="btn btn-primary btn-sm rounded-5"
               onClick={() => handleShowDetails([], 'add')}
             >
-              Add Expense
+              <IoAdd />
             </button>
           </div>
-          <Container fluid>
-            {expenses.map((expense) => {
-              return <ExpenseTable
-                key={expense.date}
-                {...expense}
-                onShowDetails={handleShowDetails}
-              />
-            })}
-          </Container>
-        </Section>
+          <Section>
+              {expenses.map((expense) => {
+                return <ExpenseTable
+                  key={expense.date}
+                  {...expense}
+                  onShowDetails={handleShowDetails}
+                />
+              })}
+          </Section>
+        </Container>
       </div>
 
     )
