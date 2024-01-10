@@ -16,10 +16,6 @@ const StyledDatePicker = styled(DatePicker)`
   width: 95%;
 `;
 
-const StyledCreatable = styled(Creatable)`
-  width: 75%;
-`;
-
 const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose }) => {
     const categoryOptions = [
         { value: 'Groceries', label: 'Groceries' },
@@ -115,7 +111,8 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                         showIcon
                         todayButton="Today"
                     />
-                    <StyledCreatable
+                    <Creatable
+                        className="w-75"
                         placeholder='Category'
                         defaultValue={expenseData.category ? { value: expenseData.category, label: expenseData.category } : ''}
                         options={categoryOptions}
@@ -195,7 +192,8 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
 
                         <div className='d-flex gap-2 my-2'>
                             <div className='align-self-center'>Split It Among</div>
-                            <StyledCreatable
+                            <Creatable
+                                className="w-75"
                                 isClearable={true}
                                 onChange={(inputValue) => handleSplitGroupInput(inputValue.map(item => item.value))}
                                 isMulti={true}
