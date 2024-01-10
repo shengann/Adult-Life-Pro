@@ -43,12 +43,10 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         note: expenseDetails.note,
         paidBy: expenseDetails.paidBy,
         splitOptions: expenseDetails.splitOptions,
-        splitGroup: expenseDetails.splitGroup,
+        splitGroup: expenseDetails.splitGroup || [],
         personalExpense: expenseDetails.personalExpense
     }
     const [expenseData, setExpenseData] = useState(initialState);
-    console.log("expenseData", expenseData.splitOptions)
-    console.log("expenseData", expenseData.paidBy)
 
     const handleExpenseInput = (e) => {
         const { name, value } = e.target;
@@ -70,7 +68,6 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                     console.error("Error updating expense:", error);
                 });
         } else if (displayMode === "add") {
-            console.log({ ...expenseData })
             createExpense({ ...expenseData })
                 .then(() => onClose())
                 .catch((error) => {
@@ -215,7 +212,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                                         value={groupItem.amount}
                                         handleChange={(e) => {
                                             const updatedSplitGroup = [...expenseData.splitGroup];
-                                            updatedSplitGroup[index].amount = e.target.value
+                                            updatedSplitGroup[index].amount = parseInt(e.target.value);
                                             setExpenseData({ ...expenseData, splitGroup: updatedSplitGroup })
                                         }}
                                         disabled={displayMode === 'view'}

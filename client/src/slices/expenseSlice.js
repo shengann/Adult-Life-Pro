@@ -1,6 +1,6 @@
 import { apiSlice } from './apiSlice';
 
-export const productsApiSlice = apiSlice.injectEndpoints({
+export const expensesApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getExpenses: builder.query({
             query: () => ({
@@ -48,4 +48,4 @@ export const {
     useUpdateExpenseMutation,
     useDeleteExpenseMutation
 
-} = productsApiSlice;
+} = expensesApiSlice;

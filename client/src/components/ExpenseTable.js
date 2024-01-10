@@ -45,10 +45,10 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
           <div className="table-responsive">
             <Table hover className="table rounded-3 overflow-hidden">
               <tbody>
-                {items.map((item) => {
+                {items.map((item,index) => {
                   return (
-                    <Tr>
-                      <th scope="row"><div className='icon'><Badge pill bg="info" >{item.category}</Badge> &#x1F372;</div></th>
+                    <Tr key={index}>
+                      <td><div className='icon'><Badge pill bg="info" >{item.category}</Badge> &#x1F372;</div></td>
                       <td>{item.note}</td>
                       <td>RHB Credit Card</td>
                       <td>RM {item.amount}</td>
