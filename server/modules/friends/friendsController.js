@@ -1,4 +1,4 @@
-import Friend from '../models/friendsModel.js';
+import Friend from '../../models/friendsModel.js';
 
 const createFriend = async (req, res) => {
     try {

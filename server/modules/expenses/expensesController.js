@@ -1,5 +1,5 @@
 import Expense from '../../models/expensesModel.js';
-import { expenseUpdateFriendAmount } from './service.js';
+import { expenseUpdateFriendAmount } from './expenseService.js';
 
 const createExpense = async (req, res) => {
     try {
