@@ -1,32 +1,45 @@
 import Expense from '../../models/expensesModel.js';
 import { expenseUpdateFriendAmount } from './expenseService.js';
+import Joi from 'joi'
+
+const expenseSchema = Joi.object({
+    date: Joi.date().required(),
+    amount: Joi.number().required(),
+    category: Joi.string().required(),
+    description: Joi.string(),
+    splitOptions: Joi.string().valid('Equally', 'Unequally'),    
+    splitGroup: Joi.array(),
+    personalExpense: Joi.number(),
+    paidBy: Joi.string(),
+    paidBy: Joi.string(),
+})
 
 const createExpense = async (req, res) => {
     try {
-        const { date, amount, category, splitOptions, splitGroup, personalExpense, paidBy } = req.body
+        const {splitOptions, splitGroup, personalExpense, paidBy } = req.body
 
-        if (!amount || !category || !date) {
-            res.status(400).json({ error: 'Please Provide all values' });
-            return;
+        const { error } = expenseSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ error: 'Invalid request body' });
         }
 
-        if (splitOptions && splitGroup && personalExpense && paidBy) {
+        const expense = await Expense.create(req.body)
+
+        if (splitOptions && splitGroup && personalExpense && paidBy && expense) {
             const friendUpdates = splitGroup.map(item => expenseUpdateFriendAmount(item.name, item.amount, paidBy));
             await Promise.all(friendUpdates);
         }
-        const expense = await Expense.create(req.body)
         res.status(201).json({ expense })
     } catch (e) {
         console.error("Error creating expense:", e);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-
 };
 
 const getAllExpense = async (req, res) => {
     try {
         const expenses = await Expense.find({}).sort({ date: -1 })
-        const groupedExpenses = [];
+        const groupedExpenses = {};
 
         for (const expense of expenses) {
             const date = new Date(expense.date).toDateString();

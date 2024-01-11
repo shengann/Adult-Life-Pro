@@ -15,7 +15,7 @@ const friendsSchema = new mongoose.Schema({
     phoneNo: {
         type: Number,
     },
-    address: {
+    email: {
         type: String,
     }
 },

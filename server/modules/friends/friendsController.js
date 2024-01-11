@@ -1,12 +1,19 @@
 import Friend from '../../models/friendsModel.js';
+import Joi from 'joi'
+
+const friendSchema = Joi.object({
+    amount: Joi.number().required(),
+    name: Joi.string().required(),
+    expenseId: Joi.string().required(),
+    phoneNo : Joi.number(), 
+    email : Joi.string()
+})
 
 const createFriend = async (req, res) => {
     try {
-        const { amount, name } = req.body
-
-        if (!amount || !name ) {
-            res.status(400).json({ error: 'Please Provide all values' });
-            return;
+        const { error } = friendSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ error: 'Invalid request body' });
         }
         const friend = await Friend.create(req.body)
         res.status(201).json({ friend })
