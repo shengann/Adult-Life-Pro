@@ -37,7 +37,21 @@ export const friendsApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
             }),
             providesTags: ['Friends'],
-        })
+        }),
+        getPayable: builder.query({
+            query: () => ({
+                url: 'api/v1/friends/payable',
+            }),
+            keepUnusedDataFor: 5,
+            providesTags: ['Friends'],
+        }),
+        getReceivable: builder.query({
+            query: () => ({
+                url: 'api/v1/friends/receivable',
+            }),
+            keepUnusedDataFor: 5,
+            providesTags: ['Friends'],
+        }),
     }),
 });
 
@@ -46,6 +60,7 @@ export const {
     useGetFriendsDetailsQuery,
     useAddFriendsMutation,
     useUpdateFriendsMutation,
-    useDeleteFriendsMutation
-
+    useDeleteFriendsMutation,
+    useGetPayableQuery,
+    useGetReceivableQuery
 } = friendsApiSlice;

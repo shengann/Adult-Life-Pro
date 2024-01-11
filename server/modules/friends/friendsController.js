@@ -26,7 +26,7 @@ const createFriend = async (req, res) => {
 
 const getAllFriend = async (req, res) => {
     try {
-        const friends = await Friend.find({}).sort({ date: -1 })
+        const friends = await Friend.find({})
 
         res.status(200).json(friends);
     } catch (e) {
@@ -82,5 +82,30 @@ const deleteFriend = async (req, res) => {
     }
 };
 
+const getPayable = async (req, res) => {
+    try {
+        const friends = await Friend.find({ amount: { $lt: 0 } })
 
-export { createFriend, deleteFriend, getAllFriend, updateFriend };
+        res.status(200).json(friends);
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+
+};
+
+const getReceivable = async (req, res) => {
+    try {
+        const friends = await Friend.find({amount:{ $gt: 0}})
+
+        res.status(200).json(friends);
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+
+};
+
+export { createFriend, deleteFriend, getAllFriend, updateFriend, getPayable, getReceivable };

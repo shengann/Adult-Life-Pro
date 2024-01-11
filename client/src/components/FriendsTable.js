@@ -9,7 +9,7 @@ const Section = styled.section`
       width: 45%;
   }
 `
-const FriendsTable = ({ data, title }) => {
+const FriendsTable = ({ data, title, tableId }) => {
   return (
     <Section>
       <div className="border rounded-3 mb-2 bg-dark bg-gradient text-white w-50" style={{ height: '5vh' }}>
@@ -19,11 +19,28 @@ const FriendsTable = ({ data, title }) => {
         <tbody>
           {data && data.length > 0 && data.map((item, index) => {
             return (
-              <tr key={index}>
-                <td><span className="fs-5 me-3"><RxAvatar /></span>{item.name}</td>
-                <td></td>
-                <td>RM {item.amount}</td>
-              </tr>
+              <>
+                <tr data-bs-toggle="collapse" data-bs-target={`#${tableId}_r${index}`} aria-expanded="false">
+                  <td><span className="fs-5 me-3"><RxAvatar /></span>{item.name}</td>
+                  <td></td>
+                  <td>RM {item.amount}</td>
+                </tr>
+                <tr className="collapse" id={`${tableId}_r${index}`} data-bs-parent={`#${tableId}`}>
+                  <td colspan="5">
+                    <Table className="w-25">
+                      <thead>
+                        <tr>
+                          <th>test</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>test</td>
+                        </tr>
+                      </tbody>
+                    </Table></td>
+                </tr>
+              </>
             )
           })
           }
