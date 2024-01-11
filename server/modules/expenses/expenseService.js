@@ -1,6 +1,6 @@
 import Friend from '../../models/friendsModel.js';
 
-export const expenseUpdateFriendAmount = async (friendName, amount, paidBy) => {
+export const expenseUpdateFriendAmount = async (friendName, amount, paidBy, expenseId) => {
     try {
         const getFriendResult = await Friend.findOne({ name: friendName }).lean();
         let updatedAmount = getFriendResult ? getFriendResult.amount : 0;
@@ -12,12 +12,14 @@ export const expenseUpdateFriendAmount = async (friendName, amount, paidBy) => {
         }
         let result
         if (getFriendResult) {
-            result = await Friend.findOneAndUpdate({ _id: getFriendResult._id }, {
+            const updatedExpenseIds = getFriendResult.expenseIds.length === 0 ? [expenseId] : getFriendResult.expenseIds.concat(expenseId); result = await Friend.findOneAndUpdate({ _id: getFriendResult._id }, {
                 ...getFriendResult._doc,
-                amount: updatedAmount
+                amount: updatedAmount,
+                expenseIds: updatedExpenseIds
             });
         } else {
-            result = await Friend.create({ name: friendName, amount: updatedAmount });
+            const expenseIds = [expenseId]
+            result = await Friend.create({ name: friendName, amount: updatedAmount, expenseIds: expenseIds },);
         }
         return result;
     } catch (e) {

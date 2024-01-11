@@ -12,6 +12,7 @@ const expenseSchema = Joi.object({
     personalExpense: Joi.number(),
     paidBy: Joi.string(),
     paidBy: Joi.string(),
+    note: Joi.string()
 })
 
 const createExpense = async (req, res) => {
@@ -20,13 +21,14 @@ const createExpense = async (req, res) => {
 
         const { error } = expenseSchema.validate(req.body);
         if (error) {
+            console.error({"error":error})
             return res.status(400).json({ error: 'Invalid request body' });
         }
 
         const expense = await Expense.create(req.body)
 
         if (splitOptions && splitGroup && personalExpense && paidBy && expense) {
-            const friendUpdates = splitGroup.map(item => expenseUpdateFriendAmount(item.name, item.amount, paidBy));
+            const friendUpdates = splitGroup.map(item => expenseUpdateFriendAmount(item.name, item.amount, paidBy, expense._id.toString()));
             await Promise.all(friendUpdates);
         }
         res.status(201).json({ expense })
