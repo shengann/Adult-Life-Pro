@@ -165,6 +165,7 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
                             onChange={(event) => {
                                 setIsSplitExpense(event.target.checked)
                             }}
+                            checked={isSplitExpense}
                         />
                     </div>
                 </div>
