@@ -15,7 +15,7 @@ const StyledDatePicker = styled(DatePicker)`
   width: 95%;
 `;
 
-const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose }) => {
+const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose }) => {
     const categoryOptions = [
         { value: 'Groceries', label: 'Groceries' },
         { value: 'Dining Out', label: 'Dining Out' },
@@ -241,4 +241,4 @@ const ExpenseDetailPopup = ({ showPopup, expenseDetails, displayMode, onClose })
         </Modal>
     )
 }
-export default ExpenseDetailPopup
+export default ExpenseDetailModal

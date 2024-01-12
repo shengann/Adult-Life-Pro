@@ -50,7 +50,7 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
                       <td><div className='icon'><Badge pill bg="info" >{item.category}</Badge> &#x1F372;</div></td>
                       <td>{item.note}</td>
                       <td>RHB Credit Card</td>
-                      <td>RM {item.amount}</td>
+                      <td>$ {item.amount}</td>
                       <td className='text-end'>
                         <BiDetail className="icon" onClick={() => onShowDetails(item, 'view')} />
                         <MdDelete className="icon" />
@@ -62,7 +62,7 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
                   <th scope="row"></th>
                   <td></td>
                   <td></td>
-                  <td>RM {totalExpense}</td>
+                  <td>$ {totalExpense}</td>
                   <td></td>
                 </Tr>
               </tbody>

@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container';
 import styled from 'styled-components';
 import { useGetExpensesQuery } from '../slices/expenseSlice';
 import { ExpenseTable } from '../components';
-import ExpenseDetailPopup from '../components/ExpenseDetailPopup';
+import ExpenseDetailModal from '../components/ExpenseDetailModal';
 import { useState } from 'react';
 import { IoAdd } from "react-icons/io5";
 
@@ -16,27 +16,27 @@ width: 75%;
 
 
 const Expenses = () => {
-  const [showExpenseDetailPopup, setShowExpenseDetailPopup] = useState(false);
+  const [showExpenseDetailModal, setShowExpenseDetailModal] = useState(false);
   const [selectedItems, setSelectedItems] = useState(null);
   const [displayMode, setDisplayMode] = useState(null);
 
   const handleShowDetails = (items, selectedDisplayMode) => {
     setSelectedItems(items);
     setDisplayMode(selectedDisplayMode)
-    setShowExpenseDetailPopup(true);
+    setShowExpenseDetailModal(true);
   };
 
   const handleClosePopup = () => {
-    setShowExpenseDetailPopup(false);
+    setShowExpenseDetailModal(false);
   };
 
   const { data: expenses } = useGetExpensesQuery()
   if (expenses && expenses.length !== 0) {
     return (
       <div>
-        {showExpenseDetailPopup && selectedItems && (
-          <ExpenseDetailPopup
-            showPopup={showExpenseDetailPopup}
+        {showExpenseDetailModal && selectedItems && (
+          <ExpenseDetailModal
+            showPopup={showExpenseDetailModal}
             expenseDetails={selectedItems}
             displayMode={displayMode}
             onClose={handleClosePopup}
