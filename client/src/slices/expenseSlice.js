@@ -36,7 +36,7 @@ export const expensesApiSlice = apiSlice.injectEndpoints({
                 url: `api/v1/expenses/${expenseId}`,
                 method: 'DELETE',
             }),
-            providesTags: ['Expenses'],
+            invalidatesTags: ['Expenses'],
         })
     }),
 });

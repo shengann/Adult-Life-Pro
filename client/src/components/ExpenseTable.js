@@ -34,7 +34,7 @@ const Tr = styled.tr`
   height: 5vh;
   `
 
-const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
+const ExpenseTable = ({ date, items, totalExpense, onShowDetails, onShowDeleteModal }) => {
 
   if (items && items.length !== 0) {
     return (
@@ -44,7 +44,7 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
           <div className="table-responsive">
             <Table hover className="table rounded-3 overflow-hidden">
               <tbody>
-                {items.map((item,index) => {
+                {items.map((item, index) => {
                   return (
                     <Tr key={index}>
                       <td><div className='icon'><Badge pill bg="info" >{item.category}</Badge> &#x1F372;</div></td>
@@ -53,7 +53,7 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails }) => {
                       <td>$ {item.amount}</td>
                       <td className='text-end'>
                         <BiDetail className="icon" onClick={() => onShowDetails(item, 'view')} />
-                        <MdDelete className="icon" />
+                        <MdDelete className="icon" onClick={() => onShowDeleteModal(item)} />
                         <MdEdit className="icon" onClick={() => onShowDetails(item, 'edit')} />
                       </td>
                     </Tr>)

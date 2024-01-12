@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import styled from 'styled-components';
 import { useGetExpensesQuery } from '../slices/expenseSlice';
-import { ExpenseTable } from '../components';
+import { DeleteModal, ExpenseTable } from '../components';
 import ExpenseDetailModal from '../components/ExpenseDetailModal';
 import { useState } from 'react';
 import { IoAdd } from "react-icons/io5";
@@ -30,6 +30,17 @@ const Expenses = () => {
     setShowExpenseDetailModal(false);
   };
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleShowDeleteModal = (items) => {
+    setSelectedItems(items);
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+  };
+
   const { data: expenses } = useGetExpensesQuery()
   if (expenses && expenses.length !== 0) {
     return (
@@ -40,6 +51,13 @@ const Expenses = () => {
             expenseDetails={selectedItems}
             displayMode={displayMode}
             onClose={handleClosePopup}
+          />
+        )}
+        {showDeleteModal && selectedItems && (
+          <DeleteModal
+            showModal={showDeleteModal}
+            id={selectedItems._id}
+            onClose={handleCloseDeleteModal}
           />
         )}
         <Container fluid className="d-flex flex-column align-items-center mt-3">
@@ -54,13 +72,14 @@ const Expenses = () => {
             </button>
           </div>
           <Section>
-              {expenses.map((expense) => {
-                return <ExpenseTable
-                  key={expense.date}
-                  {...expense}
-                  onShowDetails={handleShowDetails}
-                />
-              })}
+            {expenses.map((expense) => {
+              return <ExpenseTable
+                key={expense.date}
+                {...expense}
+                onShowDetails={handleShowDetails}
+                onShowDeleteModal={handleShowDeleteModal}
+              />
+            })}
           </Section>
         </Container>
       </div>

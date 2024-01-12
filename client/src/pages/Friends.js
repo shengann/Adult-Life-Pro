@@ -12,7 +12,6 @@ const Friends = () => {
   const { data: friends } = useGetFriendsQuery()
 
   const [selectedFriend, setSelectedFriend] = useState(null);
-  console.log("selectedFriend", selectedFriend)
   const [showFriendExpenseModal, setShowFriendExpenseModal] = useState(false);
 
   const handleFriendExpenseModal = (friend) => {
