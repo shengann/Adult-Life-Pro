@@ -45,9 +45,10 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
 
     const handleExpenseInput = (e) => {
         const { name, value } = e.target;
+        const isNumericInput = ['amount'].includes(name);
         setExpenseData((state) => ({
             ...expenseData,
-            [name]: value
+            [name]: isNumericInput ? parseFloat(value) || '' : value,
         }));
 
     };
@@ -88,7 +89,7 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
     useEffect(() => {
         if (expenseData.splitGroup && expenseData.splitOptions && expenseData.amount) {
             const personalExpense = splitExpense(expenseData.amount, expenseData.splitOptions, expenseData.splitGroup);
-            setExpenseData((prevData) => ({ ...prevData, personalExpense }));
+            setExpenseData((prevData) => ({ ...prevData, personalExpense: parseFloat(personalExpense) }));
         }
     }, [expenseData.splitGroup, expenseData.splitOptions, expenseData.amount]);
 
@@ -210,7 +211,7 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
                                         value={groupItem.amount}
                                         handleChange={(e) => {
                                             const updatedSplitGroup = [...expenseData.splitGroup];
-                                            updatedSplitGroup[index].amount = parseInt(e.target.value);
+                                            updatedSplitGroup[index].amount = parseFloat(e.target.value);
                                             setExpenseData({ ...expenseData, splitGroup: updatedSplitGroup })
                                         }}
                                         disabled={displayMode === 'view'}
