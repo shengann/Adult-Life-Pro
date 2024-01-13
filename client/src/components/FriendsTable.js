@@ -22,8 +22,7 @@ const FriendsTable = ({ data, title, tableId }) => {
               <>
                 <tr>
                   <td><span className="fs-5 me-3"><RxAvatar /></span>{item.name}</td>
-                  <td></td>
-                  <td>$ {item.amount}</td>
+                  <td>$ {Math.abs(item.amount)}</td>
                 </tr>
               </>
             )
