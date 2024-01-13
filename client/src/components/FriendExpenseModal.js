@@ -1,6 +1,9 @@
 import Modal from 'react-bootstrap/Modal';
+import { useGetFriendDetailsQuery } from '../slices/friendsSlice';
 
-const FriendExpenseModal = ({ showModal, friendDetails, onClose }) => {
+const FriendExpenseModal = ({ showModal, friend, onClose }) => {
+  const { data: friendDetails } = useGetFriendDetailsQuery(friend._id);
+
   return (
     <div>
       <Modal
@@ -10,10 +13,17 @@ const FriendExpenseModal = ({ showModal, friendDetails, onClose }) => {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{friendDetails && friendDetails._id}</Modal.Body>
+        <Modal.Body>
+          <div>
+            {friendDetails && friendDetails.map((item, index) => {
+              return (
+                <div key={index}>{item.paidBy}</div>
+              )
+            })}
+          </div>
+        </Modal.Body>
       </Modal>
     </div>
   )

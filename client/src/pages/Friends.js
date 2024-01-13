@@ -4,7 +4,7 @@ import { useGetReceivableQuery, useGetPayableQuery, useGetFriendsQuery } from '.
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Friends = () => {
   const { data: receivable } = useGetReceivableQuery()
@@ -16,11 +16,17 @@ const Friends = () => {
 
   const handleFriendExpenseModal = (friend) => {
     setSelectedFriend(friend);
-    setShowFriendExpenseModal(true);
   };
+
+  useEffect(() => {
+    if (selectedFriend !== null) {
+      setShowFriendExpenseModal(true);
+    }
+  }, [selectedFriend]);
 
   const handleClosePopup = () => {
     setShowFriendExpenseModal(false);
+    setSelectedFriend(null);
   };
 
   return (
@@ -48,11 +54,14 @@ const Friends = () => {
           </Row>
         </Container>
       </div>
-      <FriendExpenseModal
-        showModal={showFriendExpenseModal}
-        friendDetails={selectedFriend}
-        onClose={handleClosePopup}
-      />
+      {
+        selectedFriend !== null &&
+        < FriendExpenseModal
+          showModal={showFriendExpenseModal}
+          friend={selectedFriend}
+          onClose={handleClosePopup}
+        />
+      }
     </div>
 
   )

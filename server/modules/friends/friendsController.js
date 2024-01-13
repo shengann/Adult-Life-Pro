@@ -1,12 +1,13 @@
 import Friend from '../../models/friendsModel.js';
 import Joi from 'joi'
+import Expense from '../../models/expensesModel.js';
 
 const friendSchema = Joi.object({
-    amount: Joi.number().required(),
+    amount: Joi.number().strict().required(),
     name: Joi.string().required(),
     expenseId: Joi.string().required(),
-    phoneNo : Joi.number(), 
-    email : Joi.string()
+    phoneNo: Joi.number(),
+    email: Joi.string()
 })
 
 const createFriend = async (req, res) => {
@@ -84,7 +85,7 @@ const deleteFriend = async (req, res) => {
 
 const getPayable = async (req, res) => {
     try {
-        const friends = await Friend.find({ amount: { $lt: 0 } })
+        const friends = await Friend.find({ amount: { $gt: 0 } })
 
         res.status(200).json(friends);
     } catch (e) {
@@ -97,7 +98,7 @@ const getPayable = async (req, res) => {
 
 const getReceivable = async (req, res) => {
     try {
-        const friends = await Friend.find({amount:{ $gt: 0}})
+        const friends = await Friend.find({ amount: { $lt: 0 } })
 
         res.status(200).json(friends);
     } catch (e) {
@@ -108,4 +109,21 @@ const getReceivable = async (req, res) => {
 
 };
 
-export { createFriend, deleteFriend, getAllFriend, updateFriend, getPayable, getReceivable };
+const getFriendDetail = async (req, res) => {
+    try {
+        const { id: friendId } = req.params
+
+        const friend = await Friend.findById(friendId);
+
+        const expenses = await Expense.find({ _id: { $in: friend.expenseIds } }).sort({ date: -1 })
+
+        res.status(200).json(expenses);
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+
+};
+
+export { createFriend, deleteFriend, getAllFriend, updateFriend, getPayable, getReceivable, getFriendDetail };

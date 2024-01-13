@@ -4,12 +4,12 @@ import Joi from 'joi'
 
 const expenseSchema = Joi.object({
     date: Joi.date().required(),
-    amount: Joi.number().required(),
+    amount: Joi.number().strict().required(),
     category: Joi.string().required(),
     description: Joi.string(),
     splitOptions: Joi.string().valid('Equally', 'Unequally'),    
     splitGroup: Joi.array(),
-    personalExpense: Joi.number(),
+    personalExpense: Joi.number().strict(),
     paidBy: Joi.string(),
     paidBy: Joi.string(),
     note: Joi.string()
@@ -28,7 +28,7 @@ const createExpense = async (req, res) => {
         const expense = await Expense.create(req.body)
 
         if (splitOptions && splitGroup && personalExpense && paidBy && expense) {
-            const friendUpdates = splitGroup.map(item => expenseUpdateFriendAmount(item.name, item.amount, paidBy, expense._id.toString()));
+            const friendUpdates = splitGroup.map(item => expenseUpdateFriendAmount(item, paidBy, expense._id.toString(),personalExpense));
             await Promise.all(friendUpdates);
         }
         res.status(201).json({ expense })

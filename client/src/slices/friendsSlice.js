@@ -10,8 +10,8 @@ export const friendsApiSlice = apiSlice.injectEndpoints({
             providesTags: ['Friends'],
         }),
         getFriendsDetails: builder.query({
-            query: (expenseId) => ({
-                url: `api/v1/friends/${expenseId}`,
+            query: (friendId) => ({
+                url: `api/v1/friends/${friendId}`,
             }),
             keepUnusedDataFor: 5,
         }),
@@ -32,11 +32,11 @@ export const friendsApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ['Friends'],
         }),
         deleteFriends: builder.mutation({
-            query: (expenseId) => ({
-                url: `api/v1/friends/${expenseId}`,
+            query: (friendId) => ({
+                url: `api/v1/friends/${friendId}`,
                 method: 'DELETE',
             }),
-            providesTags: ['Friends'],
+            invalidatesTags: ['Friends'],
         }),
         getPayable: builder.query({
             query: () => ({
@@ -52,6 +52,13 @@ export const friendsApiSlice = apiSlice.injectEndpoints({
             keepUnusedDataFor: 5,
             providesTags: ['Friends'],
         }),
+        getFriendDetails: builder.query({
+            query: (friendId) => ({
+                url: `api/v1/friends/detail/${friendId}`,
+            }),
+            keepUnusedDataFor: 0,
+            providesTags: ['Friends'],
+        }),
     }),
 });
 
@@ -62,5 +69,6 @@ export const {
     useUpdateFriendsMutation,
     useDeleteFriendsMutation,
     useGetPayableQuery,
-    useGetReceivableQuery
+    useGetReceivableQuery,
+    useGetFriendDetailsQuery
 } = friendsApiSlice;
