@@ -4,9 +4,9 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 
 const Friends = () => {
-  const { data: receivable } = useGetReceivableQuery()
-  const { data: payable } = useGetPayableQuery()
-  const { data: friends } = useGetFriendsQuery()
+  const { data: receivable, refetch: refetchReceivable } = useGetReceivableQuery()
+  const { data: payable, refetch: refetchPayable } = useGetPayableQuery()
+  const { data: friends, refetch: refetchFriends } = useGetFriendsQuery()
 
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [showFriendExpenseModal, setShowFriendExpenseModal] = useState(false);
@@ -41,6 +41,9 @@ const Friends = () => {
   const handleCloseSettleUpModal = () => {
     setShowSettleUpFriendModal(false);
     setSettleUpFriend(null);
+    refetchReceivable();
+    refetchPayable();
+    refetchFriends();
   };
 
   return (
@@ -53,7 +56,7 @@ const Friends = () => {
             onShowDetails={handleFriendExpenseModal}
             onShowSettleUp={handleSettleUpModal}
           />
-          <span class="d-none d-sm-block vr"></span>
+          <span className="d-none d-sm-block vr"></span>
           <FriendsTable
             data={receivable}
             title={"you are owed"}

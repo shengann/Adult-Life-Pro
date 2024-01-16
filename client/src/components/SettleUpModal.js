@@ -1,11 +1,12 @@
 import moment from 'moment';
 import { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
+import { Modal, Button } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import styled from 'styled-components';
+import { useAddCashFlowMutation } from '../slices/cashFlowsSlice';
 
 const SharedStyle = `
-  width: 15vw;
+  width: 12vw;
   height: 4.5vh;
   background-color: #f6f6f6;
   color: #acacac;
@@ -32,12 +33,12 @@ const SettleUpModal = ({ showModal, friend, onClose }) => {
   const initialState = (friend.amount < 0) ? {
     amount: -friend.amount,
     source: friend.name,
-    transferDestination: null,
+    transferDestination: "Cash",
     date: new Date(),
   } :
     {
       amount: -friend.amount,
-      source: null,
+      source: "Cash",
       transferDestination: friend.name,
       date: new Date(),
     }
@@ -52,6 +53,17 @@ const SettleUpModal = ({ showModal, friend, onClose }) => {
     }));
 
   };
+
+  const [createCashFlow] = useAddCashFlowMutation()
+
+  const handleSubmit = (e) => {
+    createCashFlow({ ...settleUpData })
+      .then(() => onClose())
+      .catch((error) => {
+        console.error("Error creating cash flow:", error);
+      });
+  }
+  
 
   return (
     <div>
@@ -104,6 +116,14 @@ const SettleUpModal = ({ showModal, friend, onClose }) => {
             }
           </Section>
         </Modal.Body>
+        <Modal.Footer>
+          <Button className="btn btn-sm" variant="secondary" onClick={onClose}>
+            Close
+          </Button>
+          <Button className="btn btn-sm" variant="success" onClick={handleSubmit}>
+            Settle Up
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   )

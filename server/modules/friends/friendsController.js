@@ -1,6 +1,7 @@
 import Friend from '../../models/friendsModel.js';
 import Joi from 'joi'
 import Expense from '../../models/expensesModel.js';
+import CashFlow from '../../models/cashFlowsModel.js';
 
 const friendSchema = Joi.object({
     amount: Joi.number().strict().required(),
@@ -27,7 +28,12 @@ const createFriend = async (req, res) => {
 
 const getAllFriend = async (req, res) => {
     try {
-        const friends = await Friend.find({})
+        const { name } = req.query;
+        const filter = {};
+        if (name !== undefined && name !== '') {
+            filter.name = { $regex: new RegExp(name, 'i') };
+        }
+        const friends = await Friend.find(filter);
 
         res.status(200).json(friends);
     } catch (e) {
@@ -109,15 +115,33 @@ const getReceivable = async (req, res) => {
 
 };
 
+const getFriend = async (req, res) => {
+    try {
+        const {name} = req.query
+        const friends = await Friend.find({ name: {$regex: new RegExp(name, 'i') } })
+
+        res.status(200).json(friends);
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+
+};
+
 const getFriendDetail = async (req, res) => {
     try {
         const { id: friendId } = req.params
 
-        const friend = await Friend.findById(friendId);
+        const friend = await Friend.findById(friendId).lean();
+        const expenses = await Expense.find({ _id: { $in: friend.expenseIds } }).sort({ date: -1 }).lean()
+        let cashFlows = [];
+        if (friend.cashFlowIds && friend.cashFlowIds.length > 0) {
+            cashFlows = await CashFlow.find({ _id: { $in: friend.cashFlowIds } }).sort({ date: -1 }).lean();
+        }
 
-        const expenses = await Expense.find({ _id: { $in: friend.expenseIds } }).sort({ date: -1 })
-
-        res.status(200).json(expenses);
+        const result = expenses.concat(cashFlows);
+        res.status(200).json(result);
     } catch (e) {
         console.error(e)
         res.status(500).json({ error: 'Internal Server Error' });

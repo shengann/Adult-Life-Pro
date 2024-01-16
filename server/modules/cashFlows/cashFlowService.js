@@ -15,7 +15,7 @@ export const cashFlowUpdateFriendAmount = async (item, cashFlowId) => {
         }
 
         const amountChange = isOwnAccount ? -item.amount : item.amount;
-        const updatedcashFlowIds = [...getFriendResult.cashFlowIds, cashFlowId];
+        const updatedcashFlowIds = (getFriendResult.cashFlowIds) ? [...getFriendResult.cashFlowIds, cashFlowId] : [cashFlowId];
 
         const result = await Friend.findOneAndUpdate({ _id: getFriendResult._id }, {
             ...getFriendResult._doc,

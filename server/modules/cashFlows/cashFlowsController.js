@@ -16,7 +16,7 @@ const createCashFlow = async (req, res) => {
             return res.status(400).json({ error: 'Invalid request body' });
         }
         const friend = await CashFlow.create(req.body)
-        await cashFlowUpdateFriendAmount(req.body)
+        await cashFlowUpdateFriendAmount(req.body, friend._id)
         res.status(201).json({ friend })
     } catch (e) {
         console.error(e)
