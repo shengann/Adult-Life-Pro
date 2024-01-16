@@ -28,6 +28,6 @@ export const expenseUpdateFriendAmount = async (item, paidBy, expenseId,personal
         return result;
     } catch (e) {
         console.error("Error updating/creating friend:", e);
-        res.status(500).json({ error: 'Internal Server Error' });
+        throw e;
     }
 };

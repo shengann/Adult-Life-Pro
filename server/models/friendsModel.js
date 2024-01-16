@@ -12,6 +12,9 @@ const friendsSchema = new mongoose.Schema({
     expenseIds: {
         type: Array,
     },
+    cashFlowIds: {
+        type: Array,
+    },
     phoneNo: {
         type: Number,
     },
