@@ -1,9 +1,6 @@
-import { FriendsTable, FriendExpenseModal } from '../components';
-import FriendsCard from '../components/FriendsCard';
+import { FriendsTable, FriendExpenseModal, SettleUpModal, FriendsCard } from '../components';
 import { useGetReceivableQuery, useGetPayableQuery, useGetFriendsQuery } from '../slices/friendsSlice';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Container, Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 
 const Friends = () => {
@@ -13,6 +10,8 @@ const Friends = () => {
 
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [showFriendExpenseModal, setShowFriendExpenseModal] = useState(false);
+  const [settleUpFriend, setSettleUpFriend] = useState(null);
+  const [showSettleUpFriendModal, setShowSettleUpFriendModal] = useState(false);
 
   const handleFriendExpenseModal = (friend) => {
     setSelectedFriend(friend);
@@ -29,13 +28,38 @@ const Friends = () => {
     setSelectedFriend(null);
   };
 
+  const handleSettleUpModal = (friend) => {
+    setSettleUpFriend(friend);
+  };
+
+  useEffect(() => {
+    if (settleUpFriend !== null) {
+      setShowSettleUpFriendModal(true);
+    }
+  }, [settleUpFriend]);
+
+  const handleCloseSettleUpModal = () => {
+    setShowSettleUpFriendModal(false);
+    setSettleUpFriend(null);
+  };
+
   return (
     <div>
-      <div className="mt-2 mx-2">
+      <div className="mt-3 mx-2">
         <div className="d-flex flex-column flex-sm-row justify-content-evenly">
-          <FriendsTable tableId="payable" data={payable} title={"You owe"} />
+          <FriendsTable
+            data={payable}
+            title={"You owe"}
+            onShowDetails={handleFriendExpenseModal}
+            onShowSettleUp={handleSettleUpModal}
+          />
           <span class="d-none d-sm-block vr"></span>
-          <FriendsTable tableId="receivable" data={receivable} title={"you are owed"} />
+          <FriendsTable
+            data={receivable}
+            title={"you are owed"}
+            onShowDetails={handleFriendExpenseModal}
+            onShowSettleUp={handleSettleUpModal}
+          />
         </div>
         <Container className='mt-4'>
           <Row xs={2} sm={2} md={3} lg={4} xl={5} className='mb-4'>
@@ -46,6 +70,7 @@ const Friends = () => {
                     <FriendsCard
                       friend={friend}
                       onShowDetails={handleFriendExpenseModal}
+                      onShowSettleUp={handleSettleUpModal}
                     />
                   </Col>
                 )
@@ -60,6 +85,14 @@ const Friends = () => {
           showModal={showFriendExpenseModal}
           friend={selectedFriend}
           onClose={handleClosePopup}
+        />
+      }
+      {
+        settleUpFriend !== null &&
+        < SettleUpModal
+          showModal={showSettleUpFriendModal}
+          friend={settleUpFriend}
+          onClose={handleCloseSettleUpModal}
         />
       }
     </div>

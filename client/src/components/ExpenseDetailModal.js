@@ -42,6 +42,12 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
         personalExpense: expenseDetails.personalExpense
     }
     const [expenseData, setExpenseData] = useState(initialState);
+    
+    useEffect(() => {
+        if (displayMode === 'add') {
+            setExpenseData({ ...expenseData, date: (new Date()) })
+        }
+    }, [displayMode, expenseData]);
 
     const handleExpenseInput = (e) => {
         const { name, value } = e.target;

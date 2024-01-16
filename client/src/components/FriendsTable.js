@@ -1,30 +1,60 @@
 import Table from 'react-bootstrap/Table';
 import { RxAvatar } from "react-icons/rx";
 import styled from 'styled-components';
+import { TiTick } from "react-icons/ti";
+import { BiDetail } from "react-icons/bi";
+import React from 'react';
 
 const Section = styled.section`
+
   width: 90%;
 
   @media (min-width: 640px) {
       width: 45%;
   }
+  .icon{
+    color: gray;
+  }
+  .btn:hover {
+    background-color: gray;
+    border-color: white;
+
+    .icon {
+      color: white;
+    }
+  }
 `
-const FriendsTable = ({ data, title, tableId }) => {
+const FriendsTable = ({ data, title, onShowDetails, onShowSettleUp }) => {
+
   return (
     <Section>
       <div className="border rounded-3 mb-2 bg-secondary bg-gradient text-white w-50 d-flex align-items-center" style={{ height: '5vh' }}>
         <span className="ms-2">{title}</span>
       </div>
-      <Table hover className="table rounded-3 overflow-hidden table-responsive">
+      <Table className="table rounded-3 overflow-hidden table-responsive">
         <tbody>
           {data && data.length > 0 && data.map((item, index) => {
             return (
-              <>
+              <React.Fragment key={index}>
                 <tr>
                   <td><span className="fs-5 me-3"><RxAvatar /></span>{item.name}</td>
                   <td>$ {Math.abs(item.amount)}</td>
+                  <td className="text-end">
+                    <button
+                      className='btn btn-sm btn-outline-secondary rounded-2 '
+                      onClick={() => onShowDetails(item)}
+                    >
+                      <BiDetail className="icon" size={20} />
+                    </button>
+                    <button
+                      className='btn btn-sm btn-outline-secondary rounded-2 mx-1'
+                      onClick={() => onShowSettleUp(item)}
+                    >
+                      <TiTick className="icon" size={20} />
+                    </button>
+                  </td>
                 </tr>
-              </>
+              </React.Fragment>
             )
           })
           }
