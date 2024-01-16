@@ -67,61 +67,40 @@ const SettleUpModal = ({ showModal, friend, onClose }) => {
         <Modal.Body>
           <Section>
             {
-              settleUpData.amount < 0 ?
-                (
-                  <div className="d-flex flex-column align-items-center gap-2">
-                    <div className='text-capitalize'>
-                      You Paid <span className="text-warning">{settleUpData.transferDestination}</span>
-                    </div>
-                    <div className='text-center'>
-                      $ <input
-                        className='rounded-1 amount-input'
-                        onChange={handleSettleUpInput}
-                        value={Math.abs(settleUpData.amount)}
-                        name='amount'
-                        type='number'
-                      />
-                    </div>
-                    <div className='d-flex'>
-                      <div className='d-flex gap-2'>
-                        <DatePicker
-                          value={settleUpData.date ? moment(settleUpData.date).format("D MMM YYYY") : null}
-                          showIcon
-                          className='rounded-4 datepicker'
-                        />
-                        <input className='rounded-4 payment-method-input' placeholder='Payment Method'></input>
+              <div className="d-flex flex-column align-items-center gap-2">
+                {
+                  (settleUpData.amount < 0) ?
+                    (
+                      <div className='text-capitalize'>
+                        You Paid <span className="text-warning">{settleUpData.transferDestination}</span>
                       </div>
-                    </div>
-                  </div>
-                ) :
-                (
-                  <div className="d-flex flex-column align-items-center gap-2">
-                    <div className='text-capitalize '>
-                      <span className='text-warning'>{settleUpData.source}</span> Paid You
-                    </div>
-                    <div className='text-center'>
-                      $ <input
-                        className='rounded-1 amount-input'
-                        onChange={handleSettleUpInput}
-                        value={Math.abs(settleUpData.amount)}
-                        name='amount'
-                        type='number'
-                      />
-                    </div>
-                    <div className='d-flex'>
-                      <div className='d-flex gap-2'>
-                        <DatePicker
-                          value={settleUpData.date ? moment(settleUpData.date).format("D MMM YYYY") : null}
-                          showIcon
-                          className='rounded-4 datepicker'
-                        />
-                        <input className='rounded-4 payment-method-input' placeholder='Payment Method'></input>
+                    ) :
+                    (
+                      <div className='text-capitalize '>
+                        <span className='text-warning'>{settleUpData.source}</span> Paid You
                       </div>
-
-                    </div>
+                    )
+                }
+                <div className='text-center'>
+                  $ <input
+                    className='rounded-1 amount-input'
+                    onChange={handleSettleUpInput}
+                    value={Math.abs(settleUpData.amount)}
+                    name='amount'
+                    type='number'
+                  />
+                </div>
+                <div className='d-flex'>
+                  <div className='d-flex gap-2'>
+                    <DatePicker
+                      value={settleUpData.date ? moment(settleUpData.date).format("D MMM YYYY") : null}
+                      showIcon
+                      className='rounded-4 datepicker'
+                    />
+                    <input className='rounded-4 payment-method-input' placeholder='Payment Method'></input>
                   </div>
-
-                )
+                </div>
+              </div>
             }
           </Section>
         </Modal.Body>
