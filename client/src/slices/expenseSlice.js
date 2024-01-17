@@ -3,9 +3,20 @@ import { apiSlice } from './apiSlice';
 export const expensesApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getExpenses: builder.query({
-            query: () => ({
-                url: 'api/v1/expenses',
-            }),
+            query: ({ query }) => {
+                const queryParams = {}
+                const { date } = query;
+                if (date) {
+                    queryParams.date = date;
+                }
+                const url = Object.keys(queryParams).length > 0
+                    ? `api/v1/expenses/?${new URLSearchParams(queryParams)}`
+                    : 'api/v1/expenses';
+
+                return {
+                    url,
+                };
+            },
             keepUnusedDataFor: 5,
             providesTags: ['Expenses'],
         }),

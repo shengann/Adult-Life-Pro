@@ -22,7 +22,7 @@ const StyledSection = styled.section`
 
     .title{
       color: #36454F	;
-      font-size: medium;
+      font-size: small;
       font-weight: lighter;
     }
     .active .item {
@@ -35,7 +35,7 @@ const StyledSection = styled.section`
 
 const NavList = () => {
   const Lists = [
-    { key: 1, title: 'Home', path: '/', icon: <AiOutlineHome /> },
+    { key: 1, title: 'Home', path: '/home', icon: <AiOutlineHome /> },
     { key: 2, title: 'Expenses', path: '/expenses', icon: <BiMoney /> },
     { key: 4, title: 'Friends', path: '/friends', icon: <FaUserFriends /> },
 

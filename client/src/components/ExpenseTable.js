@@ -1,38 +1,33 @@
-import Table from 'react-bootstrap/Table';
-import Badge from 'react-bootstrap/Badge';
+import { Table, Badge } from 'react-bootstrap';
 import { BiDetail } from "react-icons/bi";
 import styled from 'styled-components';
 import moment from 'moment'
 import { MdDelete, MdEdit } from "react-icons/md";
 
 const Section = styled.section`
-font-family: Poppins, sans-serif;
-.table{
-  font-weight: 500;
-  font-size: 1.5vh;
-  table-layout: fixed;
-}
-
-.icon{
-  font-size: 2.2vh;
-  margin-right: 0.3rem;
-}
-
- @media (max-width: 768px) {
-    .icon {
-      font-size: 0.65rem; 
-    }
-
-    td {
-      font-size: 0.7rem; 
-    }
-
+  .table{
+    font-size: small;
+    table-layout: fixed;
   }
-`;
 
-const Tr = styled.tr`
-  height: 5vh;
-  `
+  .icon{
+    font-size: medium;
+  }
+  .btn-icon{
+      color: black;
+  }
+  .btn:hover {
+    background-color: gray;
+    border-color: white;
+    .btn-icon {
+      color: white;
+    }
+  }
+  tr{
+    height:5vh;
+  }
+
+`;
 
 const ExpenseTable = ({ date, items, totalExpense, onShowDetails, onShowDeleteModal }) => {
 
@@ -46,25 +41,40 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails, onShowDeleteMo
               <tbody>
                 {items.map((item, index) => {
                   return (
-                    <Tr key={index}>
-                      <td><div className='icon'><Badge pill bg="info" >{item.category}</Badge> &#x1F372;</div></td>
+                    <tr key={index}>
+                      <td><div className='icon mr-1'><Badge pill bg="info" >{item.category}</Badge> &#x1F372;</div></td>
                       <td>{item.note}</td>
                       <td>RHB Credit Card</td>
                       <td>$ {item.amount}</td>
                       <td className='text-end'>
-                        <BiDetail className="icon" onClick={() => onShowDetails(item, 'view')} />
-                        <MdDelete className="icon" onClick={() => onShowDeleteModal(item)} />
-                        <MdEdit className="icon" onClick={() => onShowDetails(item, 'edit')} />
+                        <button
+                          className='btn btn-sm btn-outline-secondary rounded-2'
+                          onClick={() => onShowDetails(item, 'view')}
+                        >
+                          <BiDetail className='btn-icon' />
+                        </button>
+                        <button
+                          className='btn btn-sm btn-outline-secondary rounded-2 mx-1'
+                          onClick={() => onShowDeleteModal(item)}
+                        >
+                          <MdDelete className='btn-icon' />
+                        </button>
+                        <button
+                          className='btn btn-sm btn-outline-secondary rounded-2'
+                          onClick={() => onShowDetails(item, 'edit')}
+                        >
+                          <MdEdit className='btn-icon' />
+                        </button>
                       </td>
-                    </Tr>)
+                    </tr>)
                 })}
-                <Tr>
+                <tr>
                   <th scope="row"></th>
                   <td></td>
                   <td></td>
                   <td>$ {totalExpense}</td>
                   <td></td>
-                </Tr>
+                </tr>
               </tbody>
             </Table>
           </div>

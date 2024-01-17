@@ -35,7 +35,19 @@ const getAllFriend = async (req, res) => {
         }
         const friends = await Friend.find(filter);
 
-        res.status(200).json(friends);
+        const sortedFriends = friends.sort((a, b) => {
+            if (a.amount === 0 && b.amount === 0) {
+                return 0;
+            } else if (a.amount === 0) {
+                return -1;
+            } else if (b.amount === 0) {
+                return 1;
+            } else {
+                return a.amount - b.amount;
+            }
+        });
+
+        res.status(200).json(sortedFriends);
     } catch (e) {
         console.error(e)
         res.status(500).json({ error: 'Internal Server Error' });

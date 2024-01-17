@@ -7,7 +7,7 @@ const expenseSchema = Joi.object({
     amount: Joi.number().strict().required(),
     category: Joi.string().required(),
     description: Joi.string(),
-    splitOptions: Joi.string().valid('Equally', 'Unequally'),    
+    splitOptions: Joi.string().valid('Equally', 'Unequally'),
     splitGroup: Joi.array(),
     personalExpense: Joi.number().strict(),
     paidBy: Joi.string(),
@@ -17,18 +17,18 @@ const expenseSchema = Joi.object({
 
 const createExpense = async (req, res) => {
     try {
-        const {splitOptions, splitGroup, personalExpense, paidBy } = req.body
+        const { splitOptions, splitGroup, personalExpense, paidBy } = req.body
 
         const { error } = expenseSchema.validate(req.body);
         if (error) {
-            console.error({"error":error})
+            console.error({ "error": error })
             return res.status(400).json({ error: 'Invalid request body' });
         }
 
         const expense = await Expense.create(req.body)
 
         if (splitOptions && splitGroup && personalExpense && paidBy && expense) {
-            const friendUpdates = splitGroup.map(item => expenseUpdateFriendAmount(item, paidBy, expense._id.toString(),personalExpense));
+            const friendUpdates = splitGroup.map(item => expenseUpdateFriendAmount(item, paidBy, expense._id.toString(), personalExpense));
             await Promise.all(friendUpdates);
         }
         res.status(201).json({ expense })
@@ -40,7 +40,21 @@ const createExpense = async (req, res) => {
 
 const getAllExpense = async (req, res) => {
     try {
-        const expenses = await Expense.find({}).sort({ date: -1 })
+        const { date } = req.query;
+        const filter = {};
+        if (date !== undefined && date !== '') {
+            const parsedDate = new Date(date);
+            const year = parsedDate.getFullYear();
+            const month = parsedDate.getMonth() + 1; // Month is not zero-based in this case
+
+            const startDate = new Date(year, month - 1, 1); // Month is zero-based
+            const endDate = new Date(year, month, 0); // Get the last day of the month
+            filter.date = {
+                $gte: startDate,
+                $lte: endDate,
+            }
+        }
+        const expenses = await Expense.find(filter).sort({ date: -1 })
         const groupedExpenses = {};
 
         for (const expense of expenses) {
