@@ -16,8 +16,11 @@ const Section = styled.section`
    .secondary {
       font-size: large;
    }
-   .personal-expense-amount {
+   .receivable-amount {
       color: #008080;
+   }
+   .payable-amount{
+      color: #800020;
    }
    @media (min-width: 576px) {
     .personal-expense,
@@ -31,13 +34,9 @@ const Section = styled.section`
     .total-expense {
       width: 20%;
   }
-}
-   
+}  
 `;
 
-const Payable = styled.div`
-   color: #800020;
-`;
 
 const FriendExpenseModal = ({ showModal, friend, onClose }) => {
   const [groupedFriendDetailsDetails, setGroupedFriendDetailsDetails] = useState(null)
@@ -53,6 +52,12 @@ const FriendExpenseModal = ({ showModal, friend, onClose }) => {
   const getAmountByName = (nameToFind, splitGroup) => {
     const foundObject = splitGroup.find(item => item.name === nameToFind);
     return foundObject ? foundObject.amount : null;
+  };
+
+  const checkIsOwnAcc = (paymentMethod) => {
+    const ownAccList = ['Cash']
+    const foundObject = ownAccList.find(item => item === paymentMethod);
+    return foundObject;
   };
 
   return (
@@ -75,28 +80,62 @@ const FriendExpenseModal = ({ showModal, friend, onClose }) => {
                 {item.items.map((detail, innerIndex) => {
                   return (
                     <Section key={innerIndex} className='d-flex border-bottom'>
-                      <div class="me-1 my-2 d-flex flex-column">
+                      <div className="me-1 my-2 d-flex flex-column">
                         <div className='month'>{moment(detail.date).format("MMM")}</div>
                         <div className="day align-self-center">{moment(detail.date).format("D")}</div>
                       </div>
-                      <div class="me-1 my-2 align-self-center category-icon">&#x1F372;</div>
-                      <div class="me-auto my-2 align-self-center">{detail.note}</div>
-                      <div class="me-1 my-2 d-flex flex-column total-expense">
-                        <div className='primary align-self-center text-secondary text-capitalize'>{detail.paidBy} paid</div>
-                        <div className="secondary align-self-center">${detail.amount}</div>
-                      </div>
                       {
-                        detail.paidBy === 'You' ? (
+                        detail.category && (
+                          <div className="me-1 my-2 align-self-center category-icon">&#x1F372;</div>
+                        )
+                      }
+                      {
+                        detail.category && (
+                          <div className="me-auto my-2 align-self-center">{detail.note}</div>
+                        )
+                      }
+                      {
+                        detail.category && (
+                          <div className="me-1 my-2 d-flex flex-column total-expense">
+                            <div className='primary align-self-center text-secondary text-capitalize'>{detail.paidBy} paid</div>
+                            <div className="secondary align-self-center">${detail.amount}</div>
+                          </div>)
+                      }
+                      {
+                        detail.category && (detail.paidBy === 'You' ? (
                           <div className="me-1 my-2 d-flex flex-column personal-expense">
                             <div className='primary align-self-center text-secondary text-capitalize'>{friend.name} owe {detail.paidBy}</div>
-                            <div className="secondary align-self-center personal-expense-amount">${getAmountByName(friend.name, detail.splitGroup)}</div>
+                            <div className="secondary align-self-center receivable-amount">${getAmountByName(friend.name, detail.splitGroup)}</div>
                           </div>
                         ) : (
-                          <div class="me-1 my-2 d-flex flex-column personal-expense">
+                          <div className="me-1 my-2 d-flex flex-column personal-expense">
                             <div className='primary align-self-center text-secondary text-capitalize'>You owe {detail.paidBy}</div>
-                            <Payable className="secondary align-self-center">${detail.personalExpense}</Payable>
+                            <div className="secondary align-self-center payable-amount">${detail.personalExpense}</div>
                           </div>
+                        ))
+                      }
+                      {
+                        detail.source && (
+                          <div className="me-1 my-2 align-self-center category-icon">&#x1f4b5;</div>
                         )
+                      }
+                      {
+                        detail.source && (
+                          <div className="me-auto my-2 align-self-center">{checkIsOwnAcc(detail.source) ? 'You' : detail.source} Paid ${Math.abs(detail.amount)} To {checkIsOwnAcc(detail.transferDestination) ? 'You' : detail.transferDestination}</div>
+                        )
+                      }
+                      {
+                        detail.source && (detail.amount > 0 ? (
+                          <div className="me-1 my-2 d-flex flex-column personal-expense">
+                            <div className='primary align-self-center text-secondary text-capitalize'>{detail.transferDestination}</div>
+                            <div className="secondary align-self-center receivable-amount">+${Math.abs(detail.amount)}</div>
+                          </div>
+                        ) : (
+                          <div className="me-1 my-2 d-flex flex-column personal-expense">
+                            <div className='primary align-self-center text-secondary text-capitalize'>{detail.source}</div>
+                            <div className="secondary align-self-center payable-amount">-${Math.abs(detail.amount)}</div>
+                          </div>
+                        ))
                       }
                     </Section>
                   )

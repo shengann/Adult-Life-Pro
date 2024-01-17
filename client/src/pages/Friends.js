@@ -67,9 +67,9 @@ const Friends = () => {
         <Container className='mt-4'>
           <Row xs={2} sm={2} md={3} lg={4} xl={5} className='mb-4'>
             {
-              friends && friends.map((friend) => {
+              friends && friends.map((friend,index) => {
                 return (
-                  <Col className='my-2'>
+                  <Col className='my-2' key={index}>
                     <FriendsCard
                       friend={friend}
                       onShowDetails={handleFriendExpenseModal}

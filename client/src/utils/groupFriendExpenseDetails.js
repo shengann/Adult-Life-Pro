@@ -19,7 +19,13 @@ const groupFriendExpenseDetails = (friendExpenseDetails) => {
         }
     });
 
-    return groupedByMonthAndYear
+    const sortedResult = groupedByMonthAndYear.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA;
+    });
+
+    return sortedResult
 };
 
 export default groupFriendExpenseDetails;

@@ -16,13 +16,19 @@ const StyledSection = styled.section`
     }
 
     .icon{
-      color: #9ca3af;
-      font-size: 3vh;
+      color: black;
+      font-size: 3.5vh;
     }
 
     .title{
-      color: black;
-      font-size: 1.7vh;
+      color: #36454F	;
+      font-size: medium;
+      font-weight: lighter;
+    }
+    .active .item {
+      background-color: #dde0e5;
+      border: 1px solid #ccc; 
+      border-radius: 30px;
     }
 
 `;
@@ -40,12 +46,12 @@ const NavList = () => {
         const { path, icon, title } = item
         return (
           <NavLink
-          key={item.key}
+            key={item.key}
             to={path}
             className="d-flex flex-column navLink"
           >
-            <div className="item">
-              <span className='icon'>{icon}</span>
+            <div className="item ms-3 me-2">
+              <span className='icon ms-3'>{icon}</span>
               <span className='title ms-2'>{title}</span>
             </div>
           </NavLink>)
