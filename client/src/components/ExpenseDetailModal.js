@@ -29,32 +29,40 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
         { value: 'You', label: 'You' }
     ]
 
+    const splitGroupDefaultValue = (splitGroup) => {
+        return splitGroup.map(item => ({
+            value: item.name,
+            label: item.name
+        }));
+    };
+
     const initialState = {
         id: expenseDetails._id,
         amount: expenseDetails.amount,
         category: expenseDetails.category,
-        date: expenseDetails.date,
+        date: displayMode === 'add' ? new Date() : expenseDetails.date,        
         description: expenseDetails.description,
         note: expenseDetails.note,
         paidBy: expenseDetails.paidBy,
         splitOptions: expenseDetails.splitOptions,
-        splitGroup: expenseDetails.splitGroup || [],
+        splitGroup: (expenseDetails.splitGroup) ? splitGroupDefaultValue(expenseDetails.splitGroup) : [],
         personalExpense: expenseDetails.personalExpense
     }
     const [expenseData, setExpenseData] = useState(initialState);
-    
-    useEffect(() => {
-        if (displayMode === 'add') {
-            setExpenseData({ ...expenseData, date: (new Date()) })
-        }
-    }, [displayMode, expenseData]);
+
+    const handleEquallySplitGroupSubmission = (splitGroup,amount) => {
+        return splitGroup.map(item => ({
+            ...item,
+            amount: amount
+        }));
+    }
 
     const handleExpenseInput = (e) => {
         const { name, value } = e.target;
         const isNumericInput = ['amount'].includes(name);
         setExpenseData((state) => ({
             ...expenseData,
-            [name]: isNumericInput ? parseFloat(value) || '' : value,
+            [name]: isNumericInput ? parseFloat(value) || null : value,
         }));
 
     };
@@ -90,7 +98,7 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
         if (expenseData.personalExpense && displayMode !== "add") {
             setIsSplitExpense(true);
         }
-    }, [expenseData.personalExpense, displayMode]);
+    }, [displayMode]);
 
     useEffect(() => {
         if (expenseData.splitGroup && expenseData.splitOptions && expenseData.amount) {
@@ -98,6 +106,13 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
             setExpenseData((prevData) => ({ ...prevData, personalExpense: parseFloat(personalExpense) }));
         }
     }, [expenseData.splitGroup, expenseData.splitOptions, expenseData.amount]);
+
+    useEffect(()=>{
+        if (expenseData.splitOptions === "Equally") {
+            const updatedSplitGroup = handleEquallySplitGroupSubmission(expenseData.splitGroup, expenseData.personalExpense);
+            setExpenseData((prevData) => ({ ...prevData, splitGroup: updatedSplitGroup }));
+        }
+    }, [expenseData.personalExpense])
 
     return (
         <Modal
@@ -200,6 +215,7 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
                         <div className='d-flex gap-2 my-2'>
                             <div className='align-self-center'>Split It Among</div>
                             <Creatable
+                                defaultValue={expenseData.splitGroup}
                                 className="w-75"
                                 isClearable={true}
                                 onChange={(inputValue) => handleSplitGroupInput(inputValue.map(item => item.value))}
