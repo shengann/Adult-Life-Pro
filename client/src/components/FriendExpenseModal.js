@@ -1,7 +1,7 @@
 import Modal from 'react-bootstrap/Modal';
 import { useGetFriendDetailsQuery } from '../slices/friendsSlice';
 import moment from 'moment';
-
+import Icon from './Icon'
 import styled from 'styled-components';
 import groupFriendExpenseDetails from '../utils/groupFriendExpenseDetails';
 import { useEffect, useState } from 'react';
@@ -86,7 +86,7 @@ const FriendExpenseModal = ({ showModal, friend, onClose }) => {
                       </div>
                       {
                         detail.category && (
-                          <div className="me-1 my-2 align-self-center category-icon">&#x1F372;</div>
+                          <div className="me-1 my-2 align-self-center category-icon"><Icon category={detail.category}/></div>
                         )
                       }
                       {

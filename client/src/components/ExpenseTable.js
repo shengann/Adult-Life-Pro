@@ -3,6 +3,7 @@ import { BiDetail } from "react-icons/bi";
 import styled from 'styled-components';
 import moment from 'moment'
 import { MdDelete, MdEdit } from "react-icons/md";
+import Icon from "./Icon"
 
 const Section = styled.section`
   .table{
@@ -42,7 +43,7 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails, onShowDeleteMo
                 {items.map((item, index) => {
                   return (
                     <tr key={index}>
-                      <td><div className='icon mr-1'><Badge pill bg="info" >{item.category}</Badge> &#x1F372;</div></td>
+                      <td><div className='icon mr-1'><Badge pill bg="info" >{item.category}</Badge> <Icon category={item.category}/></div></td>
                       <td>{item.note}</td>
                       <td>RHB Credit Card</td>
                       <td>$ {item.amount}</td>
