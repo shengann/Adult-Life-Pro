@@ -45,7 +45,7 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
         note: expenseDetails.note,
         paidBy: expenseDetails.paidBy,
         splitOptions: expenseDetails.splitOptions,
-        splitGroup: (expenseDetails.splitGroup) ? splitGroupDefaultValue(expenseDetails.splitGroup) : [],
+        splitGroup: expenseDetails.splitGroup,
         personalExpense: expenseDetails.personalExpense
     }
     const [expenseData, setExpenseData] = useState(initialState);
@@ -215,7 +215,7 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
                         <div className='d-flex gap-2 my-2'>
                             <div className='align-self-center'>Split It Among</div>
                             <Creatable
-                                defaultValue={expenseData.splitGroup}
+                                defaultValue={splitGroupDefaultValue(expenseDetails.splitGroup)}
                                 className="w-75"
                                 isClearable={true}
                                 onChange={(inputValue) => handleSplitGroupInput(inputValue.map(item => item.value))}
