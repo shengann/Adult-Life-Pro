@@ -121,7 +121,7 @@ const getReceivable = async (req, res) => {
         res.status(200).json(friends);
     } catch (e) {
         console.error(e)
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: e });
     }
 
 
