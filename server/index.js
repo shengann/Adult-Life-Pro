@@ -11,12 +11,7 @@ dotenv.config()
 const port = process.env.PORT || 5000
 
 const app = express()
-app.use(cors({
-    origin: 'https://adult-life-pro.netlify.app',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-    optionsSuccessStatus: 204,
-}));
+app.use(cors());
 app.use(express.json())
 
 app.get('/', (req, res) => {
