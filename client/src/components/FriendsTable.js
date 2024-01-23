@@ -1,35 +1,18 @@
 import Table from 'react-bootstrap/Table';
 import { RxAvatar } from "react-icons/rx";
-import styled from 'styled-components';
 import { TiTick } from "react-icons/ti";
 import { BiDetail } from "react-icons/bi";
 import React from 'react';
+import { computeTotal } from "../utils";
+import Section from '../styles/FriendTable';
 
-const Section = styled.section`
-
-  width: 90%;
-
-  @media (min-width: 640px) {
-      width: 45%;
-  }
-  .icon{
-    color: gray;
-  }
-  .btn:hover {
-    background-color: gray;
-    border-color: white;
-
-    .icon {
-      color: white;
-    }
-  }
-`
 const FriendsTable = ({ data, title, onShowDetails, onShowSettleUp }) => {
-
+  const totalAmount = (data) ? computeTotal(data) : null
   return (
-    <Section>
-      <div className="border rounded-3 mb-2 bg-secondary bg-gradient text-white w-50 d-flex align-items-center" style={{ height: '5vh' }}>
-        <span className="ms-2">{title}</span>
+    <Section payable={totalAmount > 0}>
+      <div className="border rounded-3 mb-3 total-amount w-50 d-flex align-items-center">
+        <span className="ms-2">{title} :</span>
+        <span className='ms-auto amount'>${Math.abs(totalAmount)}</span>
       </div>
       <Table className="table rounded-3 overflow-hidden table-responsive">
         <tbody>

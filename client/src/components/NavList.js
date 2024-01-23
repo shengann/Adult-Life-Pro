@@ -2,36 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { BiMoney } from "react-icons/bi";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaUserFriends } from "react-icons/fa";
-import styled from 'styled-components';
-
-const StyledSection = styled.section`
-    .navLink{
-      min-width: 25vh;
-      text-decoration: none;
-    }
-    
-    .item{
-      margin-bottom: 1vh;
-      margin-left: 3vh;
-    }
-
-    .icon{
-      color: black;
-      font-size: 3.5vh;
-    }
-
-    .title{
-      color: #36454F	;
-      font-size: small;
-      font-weight: lighter;
-    }
-    .active .item {
-      background-color: #dde0e5;
-      border: 1px solid #ccc; 
-      border-radius: 30px;
-    }
-
-`;
+import Section from '../styles/NavList';
 
 const NavList = () => {
   const Lists = [
@@ -41,7 +12,7 @@ const NavList = () => {
 
   ]
   return (
-    <StyledSection>
+    <Section>
       {Lists.map((item) => {
         const { path, icon, title } = item
         return (
@@ -56,7 +27,7 @@ const NavList = () => {
             </div>
           </NavLink>)
       })}
-    </StyledSection>
+    </Section>
 
   )
 }

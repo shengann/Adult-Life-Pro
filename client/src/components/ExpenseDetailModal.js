@@ -71,14 +71,15 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const submittedData = (expenseData.personalExpense) ? { ...expenseData } : { ...expenseData, personalExpense: expenseData.amount }
         if (displayMode === "edit") {
-            updateExpense({ ...expenseData })
+            updateExpense(submittedData)
                 .then(() => onClose())
                 .catch((error) => {
                     console.error("Error updating expense:", error);
                 });
         } else if (displayMode === "add") {
-            createExpense({ ...expenseData })
+            createExpense(submittedData)
                 .then(() => onClose())
                 .catch((error) => {
                     console.error("Error creating expense:", error);
@@ -95,7 +96,7 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
     };
 
     useEffect(() => {
-        if (expenseData.personalExpense && displayMode !== "add") {
+        if (expenseData.personalExpense && expenseData.paidBy && expenseData.splitOptions && expenseData.splitGroup && displayMode !== "add") {
             setIsSplitExpense(true);
         }
     }, [displayMode]);

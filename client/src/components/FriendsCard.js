@@ -1,32 +1,6 @@
-import styled from 'styled-components';
 import { RxAvatar } from "react-icons/rx";
+import Section from '../styles/FriendsCard';
 
-const Section = styled.section`
-    @media (min-width: 640px) {
-        .border{
-            height: ${props => props.isamountzero ? '42vh' : '42vh'};           
-            width: 15vw;
-        }
-        .expense-btn {
-            margin-top:${props => props.isamountzero ? '1.5em' : '0'}; 
-        }
-        .icon{
-            font-size: 15vh;
-        }
-        .btn{
-            font-size: smaller;
-        }
-        .text-body-secondary{
-            font-size: smaller;
-        }
-        .amount{
-            color:  ${props => props.payable ? '#800020' : '#008080'}; 
-            font-size: medium;
-            
-        }
-    }
-   
-`;
 const FriendsCard = ({ friend, onShowDetails, onShowSettleUp }) => {
     let textBodySecondary = ""
     if (friend.amount > 0) {

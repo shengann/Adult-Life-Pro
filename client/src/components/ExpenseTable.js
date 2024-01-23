@@ -1,34 +1,9 @@
 import { Table, Badge } from 'react-bootstrap';
 import { BiDetail } from "react-icons/bi";
-import styled from 'styled-components';
 import moment from 'moment'
 import { MdDelete, MdEdit } from "react-icons/md";
 import Icon from "./Icon"
-
-const Section = styled.section`
-  .table{
-    font-size: small;
-    table-layout: fixed;
-  }
-
-  .icon{
-    font-size: medium;
-  }
-  .btn-icon{
-      color: black;
-  }
-  .btn:hover {
-    background-color: gray;
-    border-color: white;
-    .btn-icon {
-      color: white;
-    }
-  }
-  tr{
-    height:5vh;
-  }
-
-`;
+import Section from '../styles/ExpenseTable';
 
 const ExpenseTable = ({ date, items, totalExpense, onShowDetails, onShowDeleteModal }) => {
 
@@ -43,7 +18,7 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails, onShowDeleteMo
                 {items.map((item, index) => {
                   return (
                     <tr key={index}>
-                      <td><div className='icon mr-1'><Badge pill bg="info" >{item.category}</Badge> <Icon category={item.category}/></div></td>
+                      <td><div className='icon mr-1'><Badge pill bg="info" >{item.category}</Badge> <Icon category={item.category} /></div></td>
                       <td>{item.note}</td>
                       <td>RHB Credit Card</td>
                       <td>$ {item.amount}</td>

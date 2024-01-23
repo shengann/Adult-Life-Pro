@@ -1,5 +1,4 @@
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import {Button,Modal} from 'react-bootstrap';
 import { useDeleteExpenseMutation } from '../slices/expenseSlice';
 
 const DeleteModal = ({ showModal, id, onClose }) => {

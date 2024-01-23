@@ -19,7 +19,7 @@ const Section = styled.section`
   }
   .right-icon {
     position: relative;
-     left: -110px;
+     left: -115px;
   }
   .left-right-icon {
     background-color: #f3f6fc;
@@ -100,7 +100,7 @@ const Expenses = () => {
         <div className="d-flex justify-content-between w-75">
           <div></div>
           <div>
-            <button className="border-0 left-righ-icon" onClick={() => handleMonthChange("left")}>
+            <button className="border-0 left-right-icon" onClick={() => handleMonthChange("left")}>
               <FiChevronLeft />
             </button>
             <DatePicker

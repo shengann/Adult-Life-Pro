@@ -59,7 +59,7 @@ const Friends = () => {
           <span className="d-none d-sm-block vr"></span>
           <FriendsTable
             data={receivable}
-            title={"you are owed"}
+            title={"You are owed"}
             onShowDetails={handleFriendExpenseModal}
             onShowSettleUp={handleSettleUpModal}
           />

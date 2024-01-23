@@ -1,11 +1,9 @@
-const computeSplitGroupAmountSum = (splitGroup) => {
-    return splitGroup.reduce((sum, item) => sum + item.amount, 0);
-};
+import computeTotal from "./computeTotal";
 
 
 const splitExpense = (amount, splitOptions, splitGroup) => {
     if (splitOptions === 'Unequally') {
-        const splitGroupAmountSum = computeSplitGroupAmountSum(splitGroup);
+        const splitGroupAmountSum = computeTotal(splitGroup);
         return amount - splitGroupAmountSum;
     } else if (splitOptions === 'Equally') {
         return (amount / (splitGroup.length+1)).toFixed(2);

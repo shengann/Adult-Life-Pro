@@ -2,41 +2,9 @@ import Modal from 'react-bootstrap/Modal';
 import { useGetFriendDetailsQuery } from '../slices/friendsSlice';
 import moment from 'moment';
 import Icon from './Icon'
-import styled from 'styled-components';
 import groupFriendExpenseDetails from '../utils/groupFriendExpenseDetails';
 import { useEffect, useState } from 'react';
-
-const Section = styled.section`
-   .category-icon {
-      font-size: x-large;
-   }
-   .primary {
-      font-size: small;
-   }
-   .secondary {
-      font-size: large;
-   }
-   .receivable-amount {
-      color: #008080;
-   }
-   .payable-amount{
-      color: #800020;
-   }
-   @media (min-width: 576px) {
-    .personal-expense,
-    .total-expense {
-      width: 28%;
-    }
-  }
-
-  @media (min-width: 992px) {
-    .personal-expense,
-    .total-expense {
-      width: 20%;
-  }
-}  
-`;
-
+import Section from '../styles/FriendExpenseModal';
 
 const FriendExpenseModal = ({ showModal, friend, onClose }) => {
   const [groupedFriendDetailsDetails, setGroupedFriendDetailsDetails] = useState(null)
