@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv'
-import ConnectDB from './config/connectDb.js'
+import ConnectDB from './config/connectDB.js'
 import ExpensesRouter from './routes/expensesRoute.js'
 import FriendsRouter from "./routes/friendsRoute.js"
 import cashFlowsRouter from "./routes/cashFlowsRoute.js"
