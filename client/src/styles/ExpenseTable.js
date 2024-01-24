@@ -5,12 +5,15 @@ const Section = styled.section`
     font-size: small;
     table-layout: fixed;
   }
+  .category{
+    font-size: xx-small;
+  }
 
   .icon{
     font-size: medium;
   }
   .btn-icon{
-      color: black;
+    color: black;
   }
   .btn:hover {
     background-color: gray;
@@ -21,6 +24,11 @@ const Section = styled.section`
   }
   tr{
     height:5vh;
+  }
+  @media (min-width: 576px) {
+    .category{
+      font-size: small;
+    }
   }
 
 `;

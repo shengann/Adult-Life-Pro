@@ -3,18 +3,36 @@ import styled from 'styled-components';
 const Section = styled.section`
   background:#ffffff;
   border-right: 1px solid #ddd;
-  width: 15%;
+  width: 15vw;
   .icon {
-    height: 20%;
-    width: 20%;
+    height: 50%;
+    width: 50%;
   }
   .logo-text {
-    font-family: 'Bradley Hand', cursive;
     color: gray;
     font-weight: lighter;
+    font-size: xx-small;
+    margin-top: 0.25rem;
   }
-  @media (max-width: 768px) {
-    width: 25%;
+  @media (min-width: 576px) {
+    .icon{
+      height: 20%;
+      width: 20%;
+    }
+    .logo-text{
+      font-family: 'Bradley Hand', cursive;
+      font-size: medium;
+    }
+  }
+  @media (min-width: 576px) {
+    .icon{
+      height: 20%;
+      width: 20%;
+    }
+    .logo-text{
+      font-family: 'Bradley Hand', cursive;
+      font-size: medium;
+    }
   }
 `;
 

@@ -18,9 +18,9 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails, onShowDeleteMo
                 {items.map((item, index) => {
                   return (
                     <tr key={index}>
-                      <td><div className='icon mr-1'><Badge pill bg="info" >{item.category}</Badge> <Icon category={item.category} /></div></td>
+                      <td><div className='icon mr-1'><Badge pill bg="info" className='category'>{item.category}</Badge> <Icon category={item.category} /></div></td>
                       <td>{item.note}</td>
-                      <td>RHB Credit Card</td>
+                      <td className='d-none d-sm-table-cell'>RHB Credit Card</td>
                       <td>$ {item.amount}</td>
                       <td className='text-end'>
                         <button
@@ -47,7 +47,7 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails, onShowDeleteMo
                 <tr>
                   <th scope="row"></th>
                   <td></td>
-                  <td></td>
+                  <td className='d-none d-sm-table-cell'></td>
                   <td>$ {totalExpense}</td>
                   <td></td>
                 </tr>

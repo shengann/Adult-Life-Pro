@@ -10,11 +10,17 @@ import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 
 const Section = styled.section`
   .expense-table{
-    width: 75%;
+    width: 100%;
   }
-  @media (max-width: 768px) {
+  .button-list{
+    width: 100%
+  }
+  @media (min-width: 992px) {
     .expense-table {
-      width: 100%; /* Adjust this width as needed */
+      width: 75%; 
+    }
+    .button-list{
+      width: 100%
     }
   }
   .right-icon {
@@ -96,8 +102,8 @@ const Expenses = () => {
           onClose={handleCloseDeleteModal}
         />
       )}
-      <Container className="d-flex flex-column align-items-center mt-3">
-        <div className="d-flex justify-content-between w-75">
+      <section className="d-flex flex-column align-items-center mt-3 mx-2">
+        <div className="d-flex justify-content-between buttonlist mb-3">
           <div></div>
           <div>
             <button className="border-0 left-right-icon" onClick={() => handleMonthChange("left")}>
@@ -135,7 +141,7 @@ const Expenses = () => {
             />
           })}
         </div>
-      </Container>
+      </section>
     </Section>
 
   )
