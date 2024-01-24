@@ -20,7 +20,7 @@ const Section = styled.section`
       width: 75%; 
     }
     .button-list{
-      width: 100%
+      width: 75%
     }
   }
   .right-icon {
@@ -103,7 +103,7 @@ const Expenses = () => {
         />
       )}
       <section className="d-flex flex-column align-items-center mt-3 mx-2">
-        <div className="d-flex justify-content-between buttonlist mb-3">
+        <div className="d-flex justify-content-between button-list mb-3">
           <div></div>
           <div>
             <button className="border-0 left-right-icon" onClick={() => handleMonthChange("left")}>
