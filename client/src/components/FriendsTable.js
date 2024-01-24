@@ -10,7 +10,7 @@ const FriendsTable = ({ data, title, onShowDetails, onShowSettleUp }) => {
   const totalAmount = (data) ? computeTotal(data) : null
   return (
     <Section payable={totalAmount > 0}>
-      <div className="border rounded-3 mb-3 total-amount w-50 d-flex align-items-center">
+      <div className="border rounded-3 mb-3 total-amount d-flex align-items-center">
         <span className="ms-2">{title} :</span>
         <span className='ms-auto amount'>${Math.abs(totalAmount)}</span>
       </div>

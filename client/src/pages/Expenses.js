@@ -1,4 +1,3 @@
-import Container from 'react-bootstrap/Container';
 import styled from 'styled-components';
 import { useGetExpensesQuery } from '../slices/expenseSlice';
 import { DeleteModal, ExpenseTable, ExpenseDetailModal } from '../components';
@@ -26,6 +25,10 @@ const Section = styled.section`
   .right-icon {
     position: relative;
      left: -115px;
+  }
+  .month-year-selector {
+    position: relative;
+    right: -70px;
   }
   .left-right-icon {
     background-color: #f3f6fc;
@@ -105,7 +108,7 @@ const Expenses = () => {
       <section className="d-flex flex-column align-items-center mt-3 mx-2">
         <div className="d-flex justify-content-between button-list mb-3">
           <div></div>
-          <div>
+          <div className='month-year-selector'>
             <button className="border-0 left-right-icon" onClick={() => handleMonthChange("left")}>
               <FiChevronLeft />
             </button>

@@ -3,10 +3,21 @@ import { apiSlice } from './apiSlice';
 export const friendsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getFriends: builder.query({
-            query: () => ({
-                url: 'api/v1/friends',
-            }),
-            keepUnusedDataFor: 5,
+            query: ({ query }) => {
+                const queryParams = {}
+                const { name } = query;
+                if (name && name!=="") {
+                    queryParams.name = name;
+                }
+                const url = Object.keys(queryParams).length > 0
+                    ? `api/v1/friends/?${new URLSearchParams(queryParams)}`
+                    : 'api/v1/friends';
+
+                return {
+                    url,
+                };
+            },
+            keepUnusedDataFor: 0,
             providesTags: ['Friends'],
         }),
         getFriendsDetails: builder.query({

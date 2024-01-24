@@ -1,12 +1,29 @@
 import { FriendsTable, FriendExpenseModal, SettleUpModal, FriendsCard } from '../components';
 import { useGetReceivableQuery, useGetPayableQuery, useGetFriendsQuery } from '../slices/friendsSlice';
-import { Container, Row, Col } from 'react-bootstrap';
+import {Row, Col, InputGroup, Form } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { FaSearch } from "react-icons/fa";
+
+const Section = styled.section`
+  .friend-name-input{
+    height: 5vh;
+  }
+  .input-group{
+    width: 55%;
+  }
+  @media (min-width: 768px) {
+    .input-group{
+      width: 25%;
+    } 
+  }
+`;
 
 const Friends = () => {
+  const [friendName, setFriendName] = useState(null)
   const { data: receivable, refetch: refetchReceivable } = useGetReceivableQuery()
   const { data: payable, refetch: refetchPayable } = useGetPayableQuery()
-  const { data: friends, refetch: refetchFriends } = useGetFriendsQuery()
+  const { data: friends, refetch: refetchFriends } = useGetFriendsQuery({ query: { name: friendName } })
 
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [showFriendExpenseModal, setShowFriendExpenseModal] = useState(false);
@@ -47,7 +64,7 @@ const Friends = () => {
   };
 
   return (
-    <div>
+    <Section>
       <div className="mt-3 mx-2">
         <div className="d-flex flex-column flex-sm-row justify-content-evenly">
           <FriendsTable
@@ -64,10 +81,19 @@ const Friends = () => {
             onShowSettleUp={handleSettleUpModal}
           />
         </div>
-        <Container className='mt-4'>
+        <div className='mt-4 mx-2'>
+          <div className='d-flex justify-content-end'>
+            <InputGroup className="rounded-3 input-group mb-2">
+              <InputGroup.Text ><FaSearch /></InputGroup.Text>
+              <Form.Control
+                placeholder="Friend's Name"
+                onChange={(input) => setFriendName(input.target.value)}
+              />
+            </InputGroup>
+          </div>
           <Row xs={2} sm={2} md={3} lg={4} xl={5} className='mb-4'>
             {
-              friends && friends.map((friend,index) => {
+              friends && friends.map((friend, index) => {
                 return (
                   <Col className='my-2' key={index}>
                     <FriendsCard
@@ -80,7 +106,7 @@ const Friends = () => {
               })
             }
           </Row>
-        </Container>
+        </div>
       </div>
       {
         selectedFriend !== null &&
@@ -98,7 +124,7 @@ const Friends = () => {
           onClose={handleCloseSettleUpModal}
         />
       }
-    </div>
+    </Section>
 
   )
 }

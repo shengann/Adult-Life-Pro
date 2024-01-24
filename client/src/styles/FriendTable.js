@@ -13,7 +13,8 @@ const Section = styled.section`
     background-color: #333333 ;
     color: #FFD700;
     font-size: small;
-    height: 4vh;
+    height: 5vh;
+    width: 75%;
   }
   .icon{
     color: gray;
@@ -34,6 +35,7 @@ const Section = styled.section`
     .total-amount{
       font-size: small;
       height: 6vh;
+      width: 75%;
     }
     .amount{
       font-size: medium;
@@ -47,6 +49,7 @@ const Section = styled.section`
     .total-amount{
       font-size: medium;
       height: 6vh;
+      width: 50%;
     }
     .amount{
       margin-right: 1.5rem;
