@@ -7,7 +7,7 @@ const expenseSchema = Joi.object({
     date: Joi.date().required(),
     amount: Joi.number().strict().required(),
     category: Joi.string().required(),
-    description: Joi.string(),
+    description: Joi.string().allow(''),
     splitOptions: Joi.string().valid('Equally', 'Unequally'),
     splitGroup: Joi.array(),
     personalExpense: Joi.number().strict(),

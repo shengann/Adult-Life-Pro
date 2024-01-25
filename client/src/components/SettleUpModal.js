@@ -73,7 +73,7 @@ const SettleUpModal = ({ showModal, friend, onClose }) => {
             {
               <div className="d-flex flex-column align-items-center gap-2">
                 {
-                  (settleUpData.amount < 0) ?
+                  (initialState.amount < 0) ?
                     (
                       <div className='text-capitalize'>
                         You Paid <span className="text-warning">{settleUpData.transferDestination}</span>
