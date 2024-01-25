@@ -19,7 +19,7 @@ const FriendExpenseModal = ({ showModal, friend, onClose }) => {
 
   const getAmountByName = (nameToFind, splitGroup) => {
     const foundObject = splitGroup.find(item => item.name === nameToFind);
-    return foundObject ? foundObject.amount : null;
+    return foundObject ? foundObject.amount.toFixed(2) : null;
   };
 
   const checkIsOwnAcc = (paymentMethod) => {
@@ -66,7 +66,7 @@ const FriendExpenseModal = ({ showModal, friend, onClose }) => {
                         detail.category && (
                           <div className="me-1 my-2 d-flex flex-column total-expense">
                             <div className='primary align-self-center text-secondary text-capitalize'>{detail.paidBy} paid</div>
-                            <div className="secondary align-self-center">${detail.amount}</div>
+                            <div className="secondary align-self-center">${detail.amount.toFixed(2)}</div>
                           </div>)
                       }
                       {
@@ -78,7 +78,7 @@ const FriendExpenseModal = ({ showModal, friend, onClose }) => {
                         ) : (
                           <div className="me-1 my-2 d-flex flex-column personal-expense">
                             <div className='primary align-self-center text-secondary text-capitalize'>You owe {detail.paidBy}</div>
-                            <div className="secondary align-self-center payable-amount">${detail.personalExpense}</div>
+                              <div className="secondary align-self-center payable-amount">${detail.personalExpense.toFixed(2)}</div>
                           </div>
                         ))
                       }
@@ -89,19 +89,19 @@ const FriendExpenseModal = ({ showModal, friend, onClose }) => {
                       }
                       {
                         detail.source && (
-                          <div className="me-auto my-2 align-self-center">{checkIsOwnAcc(detail.source) ? 'You' : detail.source} Paid ${Math.abs(detail.amount)} To {checkIsOwnAcc(detail.transferDestination) ? 'You' : detail.transferDestination}</div>
+                          <div className="me-auto my-2 align-self-center">{checkIsOwnAcc(detail.source) ? 'You' : detail.source} Paid ${(Math.abs(detail.amount)).toFixed(2)} To {checkIsOwnAcc(detail.transferDestination) ? 'You' : detail.transferDestination}</div>
                         )
                       }
                       {
                         detail.source && (detail.amount > 0 ? (
                           <div className="me-1 my-2 d-flex flex-column personal-expense">
                             <div className='primary align-self-center text-secondary text-capitalize'>{detail.transferDestination}</div>
-                            <div className="secondary align-self-center receivable-amount">+${Math.abs(detail.amount)}</div>
+                            <div className="secondary align-self-center receivable-amount">+${(Math.abs(detail.amount)).toFixed(2)}</div>
                           </div>
                         ) : (
                           <div className="me-1 my-2 d-flex flex-column personal-expense">
                             <div className='primary align-self-center text-secondary text-capitalize'>{detail.source}</div>
-                            <div className="secondary align-self-center payable-amount">-${Math.abs(detail.amount)}</div>
+                              <div className="secondary align-self-center payable-amount">-${(Math.abs(detail.amount)).toFixed(2)}</div>
                           </div>
                         ))
                       }

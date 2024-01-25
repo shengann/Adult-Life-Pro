@@ -12,7 +12,7 @@ const FriendsTable = ({ data, title, onShowDetails, onShowSettleUp }) => {
     <Section payable={totalAmount > 0}>
       <div className="border rounded-3 mb-3 total-amount d-flex align-items-center">
         <span className="ms-2">{title} :</span>
-        <span className='ms-auto amount'>${Math.abs(totalAmount)}</span>
+        <span className='ms-auto amount'>${Math.abs(totalAmount).toFixed(2)}</span>
       </div>
       <Table className="table rounded-3 overflow-hidden table-responsive">
         <tbody>
@@ -21,7 +21,7 @@ const FriendsTable = ({ data, title, onShowDetails, onShowSettleUp }) => {
               <React.Fragment key={index}>
                 <tr>
                   <td><span className="fs-5 me-3"><RxAvatar /></span>{item.name}</td>
-                  <td>$ {Math.abs(item.amount)}</td>
+                  <td>$ {Math.abs(item.amount).toFixed(2)}</td>
                   <td className="text-end">
                     <button
                       className='btn btn-sm btn-outline-secondary rounded-2 '
