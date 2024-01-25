@@ -162,14 +162,14 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
                     handleChange={handleExpenseInput}
                     disabled={displayMode === 'view'}
                 />
-                <FormRow
+                {/* <FormRow
                     type="text"
                     name="account"
                     labelText='Account'
                     value=''
                     handleChange={handleExpenseInput}
                     disabled={displayMode === 'view'}
-                />
+                /> */}
                 <FormRow
                     name="description"
                     labelText='Description'

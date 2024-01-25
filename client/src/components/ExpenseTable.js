@@ -20,7 +20,7 @@ const ExpenseTable = ({ date, items, totalExpense, onShowDetails, onShowDeleteMo
                     <tr key={index}>
                       <td><div className='icon mr-1'><Badge pill bg="info" className='category'>{item.category}</Badge> <Icon category={item.category} /></div></td>
                       <td>{item.note}</td>
-                      <td className='d-none d-sm-table-cell'>RHB Credit Card</td>
+                      <td className='d-none d-sm-table-cell'>Cash</td>
                       <td>$ {item.personalExpense.toFixed(2)}</td>
                       <td className='text-end'>
                         <button
