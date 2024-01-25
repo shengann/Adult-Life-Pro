@@ -1,4 +1,5 @@
 import Expense from '../../models/expensesModel.js';
+import handleErrors from '../../utils/handleError.js';
 import { expenseUpdateFriendAmount } from './expenseService.js';
 import Joi from 'joi'
 
@@ -33,8 +34,7 @@ const createExpense = async (req, res) => {
         }
         res.status(201).json({ expense })
     } catch (e) {
-        console.error("Error creating expense:", e);
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleErrors(res, e)
     }
 };
 
@@ -97,14 +97,12 @@ const updateExpense = async (req, res) => {
         const { amount, category, date } = req.body
 
         if (!amount || !category || !date) {
-            res.status(400).json({ error: 'Please Provide all values' });
-            return;
+            return res.status(400).json({ error: 'Please Provide all values' });
         }
         const expense = await Expense.findById(expenseId);
 
         if (!expense) {
-            res.status(400)
-            throw new Error('Expense not found')
+            return res.status(404).json({ error: 'Expense not found' });
         }
         const updatedExpense = await Expense.findOneAndUpdate({ _id: expenseId }, req.body, {
             new: true,
@@ -113,8 +111,7 @@ const updateExpense = async (req, res) => {
 
         res.status(200).json({ updatedExpense })
     } catch (e) {
-        console.error(e)
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleErrors(res,e)
     }
 
 };
@@ -131,8 +128,7 @@ const deleteExpense = async (req, res) => {
         await expense.deleteOne()
         res.status(200).json({ expense })
     } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleErrors(res, e)
     }
 };
 

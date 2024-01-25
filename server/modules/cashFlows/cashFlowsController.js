@@ -1,6 +1,7 @@
 import CashFlow from '../../models/cashFlowsModel.js';
 import Joi from 'joi'
 import { cashFlowUpdateFriendAmount } from './cashFlowService.js';
+import handleErrors from '../../utils/handleError.js';
 
 const friendSchema = Joi.object({
     date: Joi.date().required(),
@@ -19,8 +20,7 @@ const createCashFlow = async (req, res) => {
         await cashFlowUpdateFriendAmount(req.body, friend._id)
         res.status(201).json({ friend })
     } catch (e) {
-        console.error(e)
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleErrors(res, e)
     }
 
 };
@@ -60,8 +60,7 @@ const updateCashFlow = async (req, res) => {
 
         res.status(200).json({ updatedCashFlow })
     } catch (e) {
-        console.error(e)
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleErrors(res, e)
     }
 
 };
@@ -78,8 +77,7 @@ const deleteCashFlow = async (req, res) => {
         await friend.deleteOne()
         res.status(200).json({ friend })
     } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleErrors(res, e)
     }
 };
 

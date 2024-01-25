@@ -2,6 +2,7 @@ import Friend from '../../models/friendsModel.js';
 import Joi from 'joi'
 import Expense from '../../models/expensesModel.js';
 import CashFlow from '../../models/cashFlowsModel.js';
+import handleErrors from '../../utils/handleError.js';
 
 const friendSchema = Joi.object({
     amount: Joi.number().strict().required(),
@@ -20,8 +21,7 @@ const createFriend = async (req, res) => {
         const friend = await Friend.create(req.body)
         res.status(201).json({ friend })
     } catch (e) {
-        console.error(e)
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleErrors(res, e)
     }
 
 };
@@ -78,8 +78,7 @@ const updateFriend = async (req, res) => {
 
         res.status(200).json({ updatedFriend })
     } catch (e) {
-        console.error(e)
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleErrors(res, e)
     }
 
 };
@@ -96,8 +95,7 @@ const deleteFriend = async (req, res) => {
         await friend.deleteOne()
         res.status(200).json({ friend })
     } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: 'Internal Server Error' });
+        handlee(res, e)
     }
 };
 
@@ -127,19 +125,6 @@ const getReceivable = async (req, res) => {
 
 };
 
-const getFriend = async (req, res) => {
-    try {
-        const {name} = req.query
-        const friends = await Friend.find({ name: {$regex: new RegExp(name, 'i') } })
-
-        res.status(200).json(friends);
-    } catch (e) {
-        console.error(e)
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-
-
-};
 
 const getFriendDetail = async (req, res) => {
     try {
