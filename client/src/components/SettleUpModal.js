@@ -1,9 +1,10 @@
 import moment from 'moment';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import { useAddCashFlowMutation } from '../slices/cashFlowsSlice';
 import Section from '../styles/SettleUpModal';
+import Alert from 'react-bootstrap/Alert';
 
 const SettleUpModal = ({ showModal, friend, onClose }) => {
   const initialState = (friend.amount < 0) ? {
@@ -30,16 +31,31 @@ const SettleUpModal = ({ showModal, friend, onClose }) => {
 
   };
 
+  const isTestUser = process.env.REACT_APP_IS_TEST_USER;
+  const [isShowAlert, setIsShowAlert] = useState(false)
+
+  useEffect(() => {
+    if (isShowAlert) {
+      const timer = setTimeout(() => {
+        setIsShowAlert(false);
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isShowAlert]);
+
   const [createCashFlow] = useAddCashFlowMutation()
 
-  const handleSubmit = (e) => {
-    createCashFlow({ ...settleUpData })
-      .then(() => onClose())
-      .catch((error) => {
-        console.error("Error creating cash flow:", error);
-      });
+  const handleSubmit = async (e) => {
+    if (isTestUser) {
+      await createCashFlow({ ...settleUpData })
+      setIsShowAlert(true)
+    } else {
+      await createCashFlow({ ...settleUpData })
+      onClose();
+    }
   }
-  
+
 
   return (
     <div>
@@ -91,6 +107,14 @@ const SettleUpModal = ({ showModal, friend, onClose }) => {
               </div>
             }
           </Section>
+          {
+            isShowAlert && (
+              <Alert key='warning' variant='danger' dismissible transition className='mt-2'>
+                Demo Website. Read Only!
+              </Alert>
+            )
+
+          }
         </Modal.Body>
         <Modal.Footer>
           <Button className="btn btn-sm" variant="secondary" onClick={onClose}>

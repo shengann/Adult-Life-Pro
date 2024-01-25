@@ -8,6 +8,7 @@ import Creatable from 'react-select/creatable';
 import Select from 'react-select';
 import { Row, Col, Modal, Button, Form } from 'react-bootstrap';
 import { handleCreatableInput, splitExpense } from "../utils";
+import Alert from 'react-bootstrap/Alert';
 
 const StyledDatePicker = styled(DatePicker)`
   border: solid 1px #ccc;
@@ -16,6 +17,7 @@ const StyledDatePicker = styled(DatePicker)`
 `;
 
 const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose }) => {
+    const isTestUser = process.env.REACT_APP_IS_TEST_USER;
     const categoryOptions = [
         { value: 'Groceries', label: 'Groceries' },
         { value: 'Dining Out', label: 'Dining Out' },
@@ -29,28 +31,39 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
         { value: 'You', label: 'You' }
     ]
 
+    const initialState = {
+        id: expenseDetails._id,
+        amount: expenseDetails.amount,
+        category: expenseDetails.category,
+        date: displayMode === 'add' ? new Date() : expenseDetails.date,
+        description: expenseDetails.description,
+        note: expenseDetails.note,
+        paidBy: expenseDetails.paidBy,
+        splitOptions: expenseDetails.splitOptions,
+        splitGroup: displayMode === 'add' ? [] : expenseDetails.splitGroup,
+        personalExpense: expenseDetails.personalExpense
+    }
+    const [expenseData, setExpenseData] = useState(initialState);
+    const [isShowAlert, setIsShowAlert] = useState(false)
+
+    useEffect(() => {
+        if (isShowAlert) {
+            const timer = setTimeout(() => {
+                setIsShowAlert(false);
+            }, 1500);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isShowAlert]);
+
     const splitGroupDefaultValue = (splitGroup) => {
-        return splitGroup.map(item => ({
+        return (splitGroup || []).map(item => ({
             value: item.name,
             label: item.name
         }));
     };
 
-    const initialState = {
-        id: expenseDetails._id,
-        amount: expenseDetails.amount,
-        category: expenseDetails.category,
-        date: displayMode === 'add' ? new Date() : expenseDetails.date,        
-        description: expenseDetails.description,
-        note: expenseDetails.note,
-        paidBy: expenseDetails.paidBy,
-        splitOptions: expenseDetails.splitOptions,
-        splitGroup: expenseDetails.splitGroup,
-        personalExpense: expenseDetails.personalExpense
-    }
-    const [expenseData, setExpenseData] = useState(initialState);
-
-    const handleEquallySplitGroupSubmission = (splitGroup,amount) => {
+    const handleEquallySplitGroupSubmission = (splitGroup, amount) => {
         return splitGroup.map(item => ({
             ...item,
             amount: amount
@@ -69,23 +82,19 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
     const [updateExpense] = useUpdateExpenseMutation()
     const [createExpense] = useAddExpenseMutation()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const submittedData = (expenseData.personalExpense) ? { ...expenseData } : { ...expenseData, personalExpense: expenseData.amount }
-        if (displayMode === "edit") {
-            updateExpense(submittedData)
-                .then(() => onClose())
-                .catch((error) => {
-                    console.error("Error updating expense:", error);
-                });
-        } else if (displayMode === "add") {
-            createExpense(submittedData)
-                .then(() => onClose())
-                .catch((error) => {
-                    console.error("Error creating expense:", error);
-                });
-        }
+        const submittedData = (expenseData.personalExpense) ? { ...expenseData } : { ...expenseData, personalExpense: expenseData.amount };
 
+        const submitAction = displayMode === 'edit' ? updateExpense : createExpense;
+
+        if (isTestUser) {
+            await submitAction(submittedData);
+            setIsShowAlert(true)
+        } else {
+            await submitAction(submittedData);
+            onClose();
+        }
     };
 
     const [isSplitExpense, setIsSplitExpense] = useState(false);
@@ -108,7 +117,7 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
         }
     }, [expenseData.splitGroup, expenseData.splitOptions, expenseData.amount]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (expenseData.splitOptions === "Equally") {
             const updatedSplitGroup = handleEquallySplitGroupSubmission(expenseData.splitGroup, expenseData.personalExpense);
             setExpenseData((prevData) => ({ ...prevData, splitGroup: updatedSplitGroup }));
@@ -248,6 +257,14 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
 
                     </>
                 )}
+                {
+                    isShowAlert && (
+                        <Alert key='warning' variant='danger' dismissible transition>
+                            Demo Website. Read Only!
+                        </Alert>
+                    )
+
+                }
             </Modal.Body>
             {
                 displayMode !== 'view' && (
