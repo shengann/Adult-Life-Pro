@@ -19,7 +19,7 @@ const DeleteModal = ({ showModal, id, onClose }) => {
     const [deleteExpense] = useDeleteExpenseMutation()
 
     const handleDelete = async () => {
-        if (isTestUser) {
+        if (isTestUser=="TRUE") {
             await deleteExpense(id);
             setIsShowAlert(true)
         } else {

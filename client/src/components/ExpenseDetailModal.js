@@ -88,7 +88,7 @@ const ExpenseDetailModal = ({ showPopup, expenseDetails, displayMode, onClose })
 
         const submitAction = displayMode === 'edit' ? updateExpense : createExpense;
 
-        if (isTestUser) {
+        if (isTestUser=="TRUE") {
             await submitAction(submittedData);
             setIsShowAlert(true)
         } else {

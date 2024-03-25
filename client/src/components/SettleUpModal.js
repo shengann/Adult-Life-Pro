@@ -47,7 +47,7 @@ const SettleUpModal = ({ showModal, friend, onClose }) => {
   const [createCashFlow] = useAddCashFlowMutation()
 
   const handleSubmit = async (e) => {
-    if (isTestUser) {
+    if (isTestUser=="TRUE") {
       await createCashFlow({ ...settleUpData })
       setIsShowAlert(true)
     } else {
